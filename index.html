@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Throughline — Career Clarity</title>
+  <meta name="description" content="Throughline finds the single career direction sitting at the intersection of the most interests, skills, and resources you already have.">
+  <meta name="color-scheme" content="light">
+
+  <!-- Link preview (Open Graph + Twitter Card) — shown when the URL is pasted
+       into Slack, LinkedIn, iMessage, etc. og:image must be an ABSOLUTE URL.
+       preview.png is a 1200×630 card built from a finished-matrix screenshot. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Throughline">
+  <meta property="og:title" content="Throughline — Career Clarity">
+  <meta property="og:description" content="Find the single career direction sitting at the intersection of the interests, skills, and resources you already have.">
+  <meta property="og:url" content="https://dqe1.com/insights/">
+  <meta property="og:image" content="https://dqe1.com/insights/preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A finished Throughline matrix scoring how strongly career directions connect.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Throughline — Career Clarity">
+  <meta name="twitter:description" content="Find the single career direction sitting at the intersection of the interests, skills, and resources you already have.">
+  <meta name="twitter:image" content="https://dqe1.com/insights/preview.png">
+
+  <!-- All user data lives in the visitor's browser localStorage. The only
+       outbound call the browser makes is same-origin: "Recommend values" POSTs
+       to api/evaluate.php, which proxies to the Typesafe AI server-side (so the
+       browser never talks to api.typesafe.ai, and connect-src stays 'self').
+       Fonts load from Google. The CSP below reflects exactly that. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'">
+
+  <!-- Favicon: the 3×3 synergy-grid logo mark, inline so there's no extra request. -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23FAF8F4'/%3E%3Cg%3E%3Crect x='5' y='5' width='6' height='6' rx='1.5' fill='%2327AE7A'/%3E%3Crect x='13' y='5' width='6' height='6' rx='1.5' fill='%23cfe9dc'/%3E%3Crect x='21' y='5' width='6' height='6' rx='1.5' fill='%233D7DE0'/%3E%3Crect x='5' y='13' width='6' height='6' rx='1.5' fill='%23d7e2f7'/%3E%3Crect x='13' y='13' width='6' height='6' rx='1.5' fill='%238163DC'/%3E%3Crect x='21' y='13' width='6' height='6' rx='1.5' fill='%23f0d9ea'/%3E%3Crect x='5' y='21' width='6' height='6' rx='1.5' fill='%231FA0B8'/%3E%3Crect x='13' y='21' width='6' height='6' rx='1.5' fill='%23ead7f2'/%3E%3Crect x='21' y='21' width='6' height='6' rx='1.5' fill='%23D45BB0'/%3E%3C/g%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Progress bar (rating completion); shown on the ratings + matrix phases. -->
+  <div id="progressBar" class="progress-bar hidden"><div id="progressFill" class="progress-fill"></div></div>
+
+  <!-- Top navigation. Hidden on the landing page. -->
+  <header id="appNav" class="app-nav hidden">
+    <button id="navLogo" class="brand" type="button" aria-label="Back to start">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-text">
+        <span class="brand-name">Throughline</span>
+        <span class="brand-tag">Career Clarity</span>
+      </span>
+    </button>
+    <div class="nav-right">
+      <nav id="phaseTabs" class="phase-tabs" aria-label="Phases">
+        <button class="phase-tab" data-phase="inventory" type="button">01 Inventory</button>
+        <button class="phase-tab" data-phase="ratings" type="button">02 Ratings</button>
+        <button class="phase-tab" data-phase="matrix" type="button">03 Clustering</button>
+      </nav>
+      <span id="ratedCount" class="rated-count"></span>
+      <div class="overflow">
+        <button id="overflowBtn" class="icon-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="More options">⋯</button>
+        <div id="overflowMenu" class="overflow-menu hidden" role="menu">
+          <button class="menu-item" data-action="settings" type="button" role="menuitem">Matrix settings</button>
+          <button class="menu-item" data-action="rename" type="button" role="menuitem">Rename matrix</button>
+          <div class="menu-sep"></div>
+          <button class="menu-item" data-action="matrices" type="button" role="menuitem">Your matrices…</button>
+          <button class="menu-item" data-action="new" type="button" role="menuitem">New matrix</button>
+          <div class="menu-sep"></div>
+          <button class="menu-item" data-action="import" type="button" role="menuitem">Import CSV…</button>
+          <button class="menu-item" data-action="export" type="button" role="menuitem">Export CSV</button>
+          <div class="menu-sep"></div>
+          <button class="menu-item" data-action="about" type="button" role="menuitem">About</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================ LANDING ============================ -->
+  <section id="landingView" class="view landing">
+    <header class="landing-head">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          <span class="brand-name">Throughline</span>
+          <span class="brand-tag">Career Clarity</span>
+        </span>
+      </div>
+      <button class="link-accent" data-begin type="button">Begin →</button>
+    </header>
+    <div class="landing-body">
+      <div class="landing-copy">
+        <div class="eyebrow">Career Clarity Tool</div>
+        <h1 class="display">Find your<br>through-line.</h1>
+        <p class="lead">You have too many interests and no clear direction. This tool helps crystallize a single vision of your whole career — by surfacing hidden synergies between your multiple selves, it helps you envision a single pursuit that satisfies the greatest number at once.</p>
+        <div class="landing-cta">
+          <button class="btn btn-dark" data-begin type="button">Begin your matrix →</button>
+          <div class="cta-meta"><span class="rule"></span>2–3 hours · 15–40 items</div>
+        </div>
+        <div class="process">
+          <div class="eyebrow muted">Process Overview · 3 Steps</div>
+          <div class="process-step"><span class="step-num">01</span><div><div class="step-label">Inventory</div><p>List your interests — careers, skills, hobbies, resources, open doors. This breadth is your greatest asset - if you can leverage all of it.</p></div></div>
+          <div class="process-step"><span class="step-num">02</span><div><div class="step-label">Rating</div><p>Score the synergy between each pair of interests. Focus on unexpected intersections - this is where new directions may surface.</p></div></div>
+          <div class="process-step"><span class="step-num">03</span><div><div class="step-label">Clustering</div><p>The algorithm groups items by affinity - often unexpected directions become visible.</p></div></div>
+        </div>
+      </div>
+      <div class="landing-art">
+        <div class="art-card">
+          <div class="eyebrow center">Synergy Matrix</div>
+          <div id="landingGrid" class="landing-grid"></div>
+          <div id="landingLegend" class="landing-legend"></div>
+        </div>
+      </div>
+    </div>
+    <footer class="landing-foot">
+      <svg class="lock-icon" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M6 10V8a6 6 0 1 1 12 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h1Zm2 0h8V8a4 4 0 1 0-8 0v2Z" fill="currentColor"/></svg>
+      <span><strong>Data privacy, guaranteed.</strong> Your data never leaves your device — nothing is sent to a server. To share, use <strong>Export CSV</strong> and send the file to someone.</span>
+    </footer>
+  </section>
+
+  <!-- =========================== INVENTORY =========================== -->
+  <section id="inventoryView" class="view phase-view hidden">
+    <div class="phase-intro">
+      <h2 class="display sm">Inventory your past and future interests.</h2>
+      <p class="lead">Career paths you've envisioned, skills, hobbies, interests, resources, open opportunities, aspirational jobs and industries… the synergies are invisible until you name everything. Aim for around 15-40 items.</p>
+    </div>
+
+    <div class="hints">
+      <button id="hintsToggle" class="hints-toggle" type="button" aria-expanded="false">
+        <span><span class="mono-label">Hints &amp; Helpers</span> <span class="muted-inline">Not sure what to add? Start here.</span></span>
+        <span id="hintsCaret" class="caret">▸</span>
+      </button>
+      <div id="hintsPanel" class="reveal">
+        <div class="reveal-inner">
+          <div class="hints-panel">
+            <p class="hints-guide"> Createa a mutually exclusive and collectivley exhaustive list of your passions - don't let the items overlap, and don't leave anything out. Frame them in a way that's reminds you why you are you interested, and that clarifies which activities are part of this topic vs. another. 
+            <p class="muted-sm">Tap a category for examples — they drop into the field below so you can make them your own. Aim wide; you can always trim later.</p>
+            <div id="promptChips" class="prompt-chips"></div>
+            <div id="promptExamples" class="reveal">
+              <div class="reveal-inner">
+                <div id="promptExamplesBody" class="prompt-examples"></div>
+              </div>
+              <button id="hintsMoreLink" class="link-inline" type="button">more guidance →</button></p>
+            <div id="hintsMorePanel" class="reveal">
+              <div class="reveal-inner">
+                  <p class="hints-guide">Think of everything you've ever wanted to do — jobs you've loved, side projects, the "what if" ideas, the things people keep thanking you for. Breadth is the point; even half-formed directions belong here. </p>
+                <div id="hintsMoreBody" class="hints-more"></div>
+
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="inventoryListWrap" class="inv-list-wrap hidden">
+      <div class="inv-list-head">
+        <span class="mono-label">Your items</span>
+        <span id="invCount" class="mono-accent"></span>
+      </div>
+      <div id="inventoryList" class="inv-list"></div>
+    </div>
+
+    <div class="inv-add">
+      <input id="invInput" class="text-input" type="text" autocomplete="off" maxlength="48">
+      <button id="invAddBtn" class="btn btn-dark" type="button">+ Add</button>
+    </div>
+
+    <div class="proceed-wrap">
+      <button id="proceedBtn" class="btn btn-block" type="button"></button>
+      <p id="proceedHelper" class="proceed-helper hidden" role="status"></p>
+      <div class="proceed-progress" aria-hidden="true">
+        <div class="pp-track">
+          <div id="ppFill" class="pp-fill"></div>
+          <span class="pp-tick" style="left:37.5%"></span>
+          <span class="pp-tick" style="left:100%"></span>
+        </div>
+        <div class="pp-marks">
+          <span class="pp-mark" style="left:37.5%">15 · good enough</span>
+          <span class="pp-mark end" style="left:100%">40 · awesome</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ RATINGS ============================ -->
+  <section id="ratingsView" class="view phase-view narrow hidden">
+    <div class="phase-intro">
+      <div class="eyebrow">02 — Ratings</div>
+      <h2 class="display sm">Score the synergies.</h2>
+      <p class="lead">Walk through your pairs one at a time and judge how much the two reinforce each other. This is where the hidden through-lines surface — have fun brainstorming. And don't skip the rating: it's what drives the grouping in step 3.</p>
+    </div>
+    <div class="rating-card">
+      <div class="card-bar"></div>
+      <div id="ratingsEditor" class="rating-editor"></div>
+    </div>
+    <div class="rating-guidance">
+      <div class="mono-label">A few tips before you start</div>
+      <ul>
+        <li>Use the arrow keys, number keys, <strong>tab</strong>, and <strong>enter</strong> to quickly add notes, select a rating, and submit it to move to the next item.</li>
+        <li>After this introductory window, selecting a rating will automatically move to the next cell. You can always come back to edit later.</li>
+        <li>Edit the question or add notes to it to customize or refine the meaning of your matrix.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= MATRIX / CLUSTERING ===================== -->
+  <section id="matrixView" class="view matrix-view hidden">
+    <div class="matrix-head">
+      <div>
+        <div class="eyebrow">03 — Clustering</div>
+        <div id="matrixTitle" class="matrix-title">
+          <h1 id="matrixTitleText" class="display" title="Click to rename"></h1>
+          <input id="matrixTitleInput" class="display matrix-title-input hidden" type="text" maxlength="60" aria-label="Matrix title">
+          <button id="matrixTitleEdit" class="matrix-title-edit" type="button" aria-label="Rename matrix" title="Rename">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          </button>
+        </div>
+        <p class="lead">Each cell scores the synergy between two directions - how much does one of these interests reinforce the other? Click any cell to rate it — and take notes on any unexpected connections.</p>
+      </div>
+      <div class="toolbar">
+        <button id="resortBtn" class="btn btn-dark sm" type="button">Sort matrix</button>
+        <button id="recommendBtn" class="btn btn-light sm" type="button">Recommend values</button>
+        <button id="exportBtn" class="btn btn-light sm" type="button">Export CSV</button>
+      </div>
+    </div>
+
+    <!-- Sort nudge — appears once ~10 cells are rated and the matrix is still
+         unsorted. Dismissible; the dismissal is remembered. -->
+    <div id="sortHint" class="sort-hint hidden">
+      <span class="sort-hint-icon" aria-hidden="true">→</span>
+      <p class="sort-hint-text"><strong>Next step:</strong> when you've rated all the intersections, click <strong>“Sort matrix”</strong> to see what clusters are emerging. It works with just some of the matrix rated, too.</p>
+      <button id="sortHintClose" class="sort-hint-close" type="button" aria-label="Dismiss">×</button>
+    </div>
+
+    <!-- Suggestions card — appears after Recommend values runs and the AI left
+         some pairs as optional suggestions (a non-obvious connection, or a
+         too-close call). Fades as the user fills those pairs in. -->
+    <div id="reviewCard" class="review-card hidden">
+      <div class="review-card-bar"></div>
+      <div class="review-card-body">
+        <div class="review-card-head">
+          <span class="review-card-icon" aria-hidden="true">✦</span>
+          <div>
+            <div class="eyebrow review-eyebrow">Suggested ratings</div>
+            <h3 id="reviewTitle" class="review-title"></h3>
+          </div>
+        </div>
+        <p class="review-lead">The system filled in the pairs it was confident about. The ones below it was less sure of, so it left them as suggestions — keep them as-is or refine any in the grid. Refining is optional.</p>
+        <div id="reviewLegend" class="review-legend"></div>
+      </div>
+    </div>
+
+    <!-- "Your emerging through-line" card — temporarily removed; bring back when
+         AI assistance is added. Keep markup + #ids intact for easy revival
+         (paired with commented code in app.js: dom refs, renderMatrix, renderThroughline).
+    <div class="throughline-card" id="throughlineCard">
+      <div class="card-bar" id="primaryBar"></div>
+      <div class="throughline-body">
+        <div class="throughline-primary">
+          <div class="mono-label">Your emerging through-line</div>
+          <div id="primaryName" class="primary-name"></div>
+          <div id="primaryNote" class="primary-note"></div>
+        </div>
+        <div class="throughline-conns">
+          <div class="mono-label">Strongest connections</div>
+          <div id="topConns" class="top-conns"></div>
+        </div>
+      </div>
+    </div>
+    -->
+
+    <div id="matrixScroll" class="matrix-scroll im-scroll">
+      <div id="matrixGrid" class="matrix-grid"></div>
+    </div>
+
+    <div class="legend" id="legendRow">
+      <span class="mono-label">Clusters</span>
+      <div id="legendChips" class="legend-chips"></div>
+      <div id="clusterCountControl" class="kcount" title="Set the number of clusters"></div>
+    </div>
+
+    <!-- Clustering guidance — appears once the matrix is sorted. -->
+    <div id="clusterGuide" class="cluster-guide hidden">
+      <div class="cluster-guide-bar"></div>
+      <div class="cluster-guide-body">
+        <button id="clusterGuideToggle" class="cluster-guide-head" type="button" aria-expanded="true" aria-controls="clusterGuideContent">
+          <span class="eyebrow accent">Reading your clusters</span>
+          <span class="cluster-guide-caret" aria-hidden="true">▾</span>
+        </button>
+        <div id="clusterGuideContent" class="cluster-guide-content">
+          <p>The clusters above show how your varied interests come together into a single career path. Taking any one of the jobs in a cluster makes all the others in it easier to achieve. If you've added all of your skills and interests to this list, then the <strong>largest cluster</strong> is likely the most rewarding area to devote your life's work to.</p>
+          <p class="cluster-guide-cta">Click a cluster heading to name it and analyze what it means.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="clusterDetails" class="cluster-details hidden"></div>
+  </section>
+
+  <!-- Completion celebration (fires once every cell has been rated). -->
+  <div id="celebrate" class="celebrate hidden" role="dialog" aria-modal="true" aria-label="All cells rated">
+    <canvas id="confettiCanvas" class="confetti-canvas" aria-hidden="true"></canvas>
+    <div class="celebrate-backdrop" data-celebrate-close></div>
+    <div class="celebrate-card">
+      <button id="celebrateClose" class="celebrate-x" type="button" aria-label="Close">×</button>
+      <div class="celebrate-burst" aria-hidden="true">🎉</div>
+      <div class="eyebrow accent">Every cell rated</div>
+      <h2 class="celebrate-title">Congratulations!</h2>
+      <p class="celebrate-lead">Awesome work so far. Now <strong>sort the matrix</strong> to reveal the connections hiding in your interests. Whatever cluster is the most connected is probably your strongest strategy for a career path.</p>
+
+      <!-- "Screenshot" of the Sort matrix button in its toolbar context. -->
+      <div class="celebrate-shot" aria-hidden="true">
+        <div class="shot-toolbar">
+          <span class="shot-btn shot-btn-dark shot-highlight">Sort matrix</span>
+          <span class="shot-btn shot-btn-light">Recommend values</span>
+          <span class="shot-btn shot-btn-light">Export CSV</span>
+          <span class="shot-pointer"></span>
+        </div>
+        <div class="shot-caption">Look for it at the top of the matrix</div>
+      </div>
+
+      <div class="celebrate-foot">
+        <button id="celebrateSort" class="btn btn-dark" type="button">Sort matrix →</button>
+        <button id="celebrateLater" class="btn btn-paper sm" type="button">I'll sort it myself</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Coach tooltip (one-time onboarding nudge). -->
+  <div id="coachTip" class="coach hidden" role="status">
+    <span class="coach-arrow" aria-hidden="true"></span>
+    <div class="eyebrow accent">Tip · keep going</div>
+    <p>Click any cell to keep exploring the rest of the intersections.</p>
+    <button id="coachDismiss" class="btn btn-paper sm" type="button">Got it</button>
+  </div>
+
+  <!-- Element popover (inline name + description edit, with delete). -->
+  <div id="popover" class="popover hidden">
+    <div class="popover-card">
+      <div class="card-bar" id="popoverBar"></div>
+      <div class="popover-body">
+        <div class="mono-label">Item</div>
+        <input id="popName" class="popover-name" type="text" maxlength="48">
+        <div class="mono-label gap">Description</div>
+        <textarea id="popDesc" class="popover-desc" rows="3"></textarea>
+        <div class="popover-actions">
+          <button id="popDelete" class="link-danger" type="button">Delete item</button>
+          <button id="popDone" class="btn btn-dark sm" type="button">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rating modal (opened by clicking a matrix cell). -->
+  <div id="ratingModal" class="modal hidden">
+    <div class="modal-backdrop" data-close></div>
+    <div id="ratingModalCard" class="modal-card im-scroll" role="dialog" aria-modal="true" aria-label="Rate pair">
+      <div class="modal-body">
+        <div class="modal-nav">
+          <button id="modalPrev" class="btn btn-light xs" type="button">← Prev</button>
+          <span id="modalPairText" class="mono-label"></span>
+          <button id="modalNext" class="btn btn-light xs" type="button">Next →</button>
+        </div>
+        <div id="modalEditor" class="rating-editor"></div>
+        <div class="modal-foot">
+          <label class="skip-toggle">
+            <input id="skipRatedToggle" type="checkbox" checked />
+            <span class="switch"></span>
+            <span class="switch-label">Skip rated cells</span>
+          </label>
+          <button class="btn btn-light" data-close type="button">Close</button>
+          <button id="modalSaveBtn" class="btn btn-accent" type="button">Save &amp; Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recommend dialog — suggests ratings for unrated pairs via the Typesafe AI,
+       and flags surprising / low-confidence pairs for personal review. Four
+       states (intro / progress / result / error) toggled by app.js. -->
+  <div id="recDialog" class="modal hidden">
+    <div class="modal-backdrop" data-rec-close></div>
+    <div class="modal-card sm" role="dialog" aria-modal="true" aria-label="Recommend values">
+      <div class="card-bar rainbow"></div>
+      <div class="modal-body">
+        <!-- Intro -->
+        <div id="recIntro">
+          <div class="eyebrow accent">AI assist</div>
+          <h3 class="display xs">Suggest ratings for the blanks.</h3>
+          <p class="lead sm">The system reads your question, notes, and rating scale, then scores each <strong>unrated</strong> pair one at a time — filling in the ones it's confident about.</p>
+          <p class="lead sm">Pairs with a surprising, non-obvious connection — or where the call is too close to make confidently — are left as suggestions you can keep or refine later. Entirely optional.</p>
+          <div id="recDescNotice" class="rec-desc-notice hidden"></div>
+          <div id="recCount" class="rec-count mono-label"></div>
+          <div class="modal-foot start">
+            <button id="recRunBtn" class="btn btn-dark" type="button">Suggest ratings</button>
+            <button class="btn btn-light" data-rec-close type="button">Maybe later</button>
+          </div>
+        </div>
+        <!-- Progress -->
+        <div id="recProgress" class="hidden">
+          <div class="eyebrow accent">Working…</div>
+          <h3 class="display xs">Evaluating your pairs.</h3>
+          <div class="rec-bar"><div id="recBarFill" class="rec-bar-fill"></div></div>
+          <p id="recProgressText" class="lead sm"></p>
+          <div class="modal-foot start">
+            <button id="recCancelBtn" class="btn btn-light" type="button">Stop</button>
+          </div>
+        </div>
+        <!-- Result -->
+        <div id="recResult" class="hidden">
+          <div class="eyebrow accent">Done</div>
+          <h3 id="recResultTitle" class="display xs"></h3>
+          <p id="recResultText" class="lead sm"></p>
+          <div class="modal-foot start">
+            <button class="btn btn-dark" data-rec-close type="button">View the matrix</button>
+          </div>
+        </div>
+        <!-- Error -->
+        <div id="recError" class="hidden">
+          <div class="eyebrow danger">Something went wrong</div>
+          <h3 class="display xs">Couldn't finish the suggestions.</h3>
+          <p id="recErrorText" class="lead sm"></p>
+          <p id="recErrorProgress" class="lead sm muted"></p>
+          <div class="modal-foot start">
+            <button id="recRetryBtn" class="btn btn-dark" type="button">Try again</button>
+            <button class="btn btn-light" data-rec-close type="button">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Re-sort prompt — shown after the cluster count is changed by hand. -->
+  <!-- About dialog (history + credits). -->
+  <div id="aboutDialog" class="modal hidden">
+    <div class="modal-backdrop" data-about-close></div>
+    <div class="modal-card sm im-scroll" role="dialog" aria-modal="true" aria-label="About the Insight Matrix">
+      <div class="card-bar rainbow"></div>
+      <div class="modal-body">
+        <div class="eyebrow accent">About</div>
+        <h3 class="display xs">The Insight Matrix.</h3>
+        <div class="about-section">
+          <div class="mono-label">The method</div>
+          <p>The Insight Matrix was developed by Charles (Chuck) Owen and Vijay Kumar, design researchers at the IIT Institute of Design in Chicago. Their structured-planning methods gave designers rigorous tools for surfacing the hidden relationships buried inside complex, messy problems.</p>
+        </div>
+        <div class="about-section">
+          <div class="mono-label">The implementation</div>
+          <p>The interactive matrix and clustering at the heart of this tool build on Zach Pino's open implementation, published on Observable. <a href="https://observablehq.com/@zachpino/insight-matrix" target="_blank" rel="noopener">View it on Observable →</a></p>
+        </div>
+        <div class="about-section">
+          <div class="mono-label">This version</div>
+          <p>I adapted the Insight Matrix into a tool for career strategy — using it to reveal the through-lines that connect your varied interests and skills into a focused path. <a href="https://DQE1.com" target="_blank" rel="noopener">More of my work at DQE1.com →</a></p>
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-dark" data-about-close type="button">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Matrix settings dialog (question / scale / notes). -->
+  <div id="settingsDialog" class="modal hidden">
+    <div class="modal-backdrop" data-settings-close></div>
+    <div class="modal-card sm im-scroll" role="dialog" aria-modal="true" aria-label="Matrix settings">
+      <div class="modal-body">
+        <h3 class="display xs">Matrix settings</h3>
+        <label class="field"><span class="mono-label">Matrix name</span>
+          <input id="setName" class="text-input" type="text"></label>
+        <label class="field"><span class="mono-label">Question</span>
+          <textarea id="setQuestion" class="text-input" rows="3"></textarea></label>
+        <div id="setQuestionGuide" class="set-question-guide"></div>
+        <label class="field"><span class="mono-label">Additional details / notes</span>
+          <textarea id="setNotes" class="text-input" rows="3"></textarea></label>
+        <div class="field-row">
+          <label class="field sm"><span class="mono-label">Scale min</span>
+            <input id="setScaleMin" class="text-input" type="number" step="1"></label>
+          <label class="field sm"><span class="mono-label">Scale max</span>
+            <input id="setScaleMax" class="text-input" type="number" step="1"></label>
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-light" data-settings-close type="button">Cancel</button>
+          <button id="setSaveBtn" class="btn btn-dark" type="button">Save settings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Your matrices dialog (the quiet multi-matrix list). -->
+  <div id="listDialog" class="modal hidden">
+    <div class="modal-backdrop" data-list-close></div>
+    <div class="modal-card sm im-scroll" role="dialog" aria-modal="true" aria-label="Your matrices">
+      <div class="modal-body">
+        <h3 class="display xs">Your matrices</h3>
+        <div id="matrixList" class="matrix-list"></div>
+        <div class="modal-foot">
+          <button class="btn btn-light" data-list-close type="button">Close</button>
+          <button id="listNewBtn" class="btn btn-dark" type="button">New matrix</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <input id="csvFileInput" type="file" accept=".csv,text/csv" hidden>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

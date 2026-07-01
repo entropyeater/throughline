@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&amp;family=DM+Serif+Display:ital@0;1&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  ::selection{background:#F0623F33;}
+  .im-scroll::-webkit-scrollbar{height:11px;width:11px;}
+  .im-scroll::-webkit-scrollbar-thumb{background:#D9D2C6;border-radius:8px;border:3px solid #FAF8F4;}
+  .im-scroll::-webkit-scrollbar-track{background:transparent;}
+  @keyframes imrise{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  @keyframes imfade{from{opacity:0;}to{opacity:1;}}
+  @keyframes coachpulse{0%,100%{box-shadow:0 0 0 3px rgba(240,98,63,0.5);}50%{box-shadow:0 0 0 8px rgba(240,98,63,0.08);}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#FAF8F4;color:#211D18;font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;">
+
+  <sc-if value="{{ showProgress }}" hint-placeholder-val="{{ false }}">
+    <div style="height:3px;width:100%;background:#EFEAE0;position:sticky;top:0;z-index:30;">
+      <div style="{{ progressBarStyle }}"></div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showNav }}" hint-placeholder-val="{{ false }}">
+    <header style="display:flex;align-items:center;justify-content:space-between;padding:15px 34px;border-bottom:1px solid #ECE7DD;background:#FAF8F4;position:sticky;top:3px;z-index:25;">
+      <button onClick="{{ goLanding }}" style="display:flex;align-items:center;gap:12px;background:none;border:none;cursor:pointer;padding:0;">
+        <div style="display:grid;grid-template-columns:repeat(3,7px);grid-template-rows:repeat(3,7px);gap:2px;">
+          <div style="background:#27AE7A;border-radius:1.5px;"></div><div style="background:#cfe9dc;border-radius:1.5px;"></div><div style="background:#3D7DE0;border-radius:1.5px;"></div>
+          <div style="background:#d7e2f7;border-radius:1.5px;"></div><div style="background:#8163DC;border-radius:1.5px;"></div><div style="background:#f0d9ea;border-radius:1.5px;"></div>
+          <div style="background:#1FA0B8;border-radius:1.5px;"></div><div style="background:#ead7f2;border-radius:1.5px;"></div><div style="background:#D45BB0;border-radius:1.5px;"></div>
+        </div>
+        <span style="display:flex;flex-direction:column;line-height:1.05;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#211D18;">Throughline</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:#A39A8B;margin-top:3px;">Career Clarity</span>
+        </span>
+      </button>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <sc-for list="{{ navTabs }}" as="t" hint-placeholder-count="2">
+          <button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</button>
+        </sc-for>
+        <sc-if value="{{ isMatrix }}" hint-placeholder-val="{{ false }}">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;color:#A39A8B;margin-left:8px;">{{ rated }}/{{ total }} rated</span>
+        </sc-if>
+      </div>
+    </header>
+  </sc-if>
+
+  <sc-if value="{{ isLanding }}" hint-placeholder-val="{{ true }}">
+    <div style="min-height:100vh;display:flex;flex-direction:column;">
+      <header style="display:flex;align-items:center;justify-content:space-between;padding:20px 36px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="display:grid;grid-template-columns:repeat(3,7px);grid-template-rows:repeat(3,7px);gap:2px;">
+            <div style="background:#27AE7A;border-radius:1.5px;"></div><div style="background:#cfe9dc;border-radius:1.5px;"></div><div style="background:#3D7DE0;border-radius:1.5px;"></div>
+            <div style="background:#d7e2f7;border-radius:1.5px;"></div><div style="background:#8163DC;border-radius:1.5px;"></div><div style="background:#f0d9ea;border-radius:1.5px;"></div>
+            <div style="background:#1FA0B8;border-radius:1.5px;"></div><div style="background:#ead7f2;border-radius:1.5px;"></div><div style="background:#D45BB0;border-radius:1.5px;"></div>
+          </div>
+          <span style="display:flex;flex-direction:column;line-height:1.05;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#211D18;">Throughline</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.18em;text-transform:uppercase;color:#A39A8B;margin-top:3px;">Career Clarity</span>
+        </span>
+        </div>
+        <button onClick="{{ onBegin }}" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#F0623F;background:none;border:none;cursor:pointer;">Begin →</button>
+      </header>
+
+      <div style="flex:1;display:flex;flex-wrap:wrap;align-items:center;gap:40px;padding:40px 36px 64px;max-width:1320px;margin:0 auto;width:100%;box-sizing:border-box;">
+        <div style="flex:1;min-width:400px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#F0623F;margin-bottom:22px;">Career Clarity Tool</div>
+          <h1 style="font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-weight:400;font-size:clamp(2.8rem,5vw,4.4rem);line-height:1.04;letter-spacing:-0.01em;margin:0 0 22px;">Find your<br>through-line.</h1>
+          <p style="font-size:16px;line-height:1.7;color:#6E665A;max-width:480px;margin:0 0 34px;">You have too many interests and no clear direction. This tool inverts the problem — instead of forcing a choice, it surfaces the hidden synergies between them and names the one pursuit that satisfies the greatest number at once.</p>
+          <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:48px;">
+            <button onClick="{{ onBegin }}" style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.01em;color:#FAF8F4;background:#211D18;border:none;border-radius:13px;padding:15px 26px;cursor:pointer;" style-hover="background:#3a332a;">Begin your matrix →</button>
+            <div style="display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#A39A8B;">
+              <span style="width:26px;height:1px;background:#D9D2C6;display:inline-block;"></span>2–3 hours · 15–40 items
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:18px;border-top:1px solid #ECE7DD;padding-top:26px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#A39A8B;margin-bottom:2px;">Process Overview · 3 Steps</div>
+            <sc-for list="{{ phases3 }}" as="ph" hint-placeholder-count="3">
+              <div style="display:flex;gap:18px;align-items:flex-start;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:#F0623F;margin-top:2px;flex:none;">{{ ph.num }}</span>
+                <div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#211D18;margin-bottom:4px;">{{ ph.label }}</div>
+                  <p style="font-size:14px;line-height:1.6;color:#6E665A;margin:0;">{{ ph.desc }}</p>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="flex:1;min-width:360px;display:flex;justify-content:center;">
+          <div style="background:#FFFFFF;border:1px solid #ECE7DD;border-radius:22px;padding:34px 38px;box-shadow:0 30px 70px -44px rgba(40,30,15,0.55);">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#A39A8B;text-align:center;margin-bottom:20px;">Synergy Matrix</div>
+            <div style="display:grid;grid-template-columns:repeat(9,26px);gap:3px;justify-content:center;">
+              <sc-for list="{{ lgrid }}" as="lc" hint-placeholder-count="81">
+                <div style="{{ lc.style }}"></div>
+              </sc-for>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:9px;margin-top:22px;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#A39A8B;margin-right:2px;">Synergy</span>
+              <sc-for list="{{ lLegend }}" as="lg" hint-placeholder-count="5">
+                <div style="display:flex;align-items:center;gap:4px;">
+                  <div style="{{ lg.style }}"></div>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#A39A8B;">{{ lg.n }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isInventory }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:680px;margin:0 auto;padding:54px 26px 90px;">
+      <div style="margin-bottom:40px;">
+        <h2 style="font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-weight:400;font-size:36px;line-height:1.12;margin:0 0 16px;">Everything you already are.</h2>
+        <p style="font-size:15px;line-height:1.7;color:#6E665A;max-width:520px;margin:0;">Career paths you've envisioned, skills, hobbies, interests, resources, open opportunities... the synergies are invisible until you name everything. We've given you some examples to get started - aim for at least 15 items.</p>
+      </div>
+
+      <div style="margin-bottom:28px;border:1.5px solid #ECE7DD;border-radius:14px;overflow:hidden;">
+        <button onClick="{{ toggleHints }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#FFFFFF;border:none;cursor:pointer;padding:14px 16px;text-align:left;">
+          <span style="display:flex;align-items:center;gap:11px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#211D18;">Hints &amp; Helpers</span>
+            <span style="font-size:12.5px;color:#A39A8B;">Stuck? Prompts to pull from.</span>
+          </span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#A39A8B;">{{ hintsCaret }}</span>
+        </button>
+        <sc-if value="{{ hintsOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:2px 16px 16px;border-top:1px solid #F1ECE3;">
+            <p style="font-size:12.5px;line-height:1.5;color:#A39A8B;margin:13px 0 13px;">Ordering doesn't matter. Tap one to drop it into the field below, then make it your own.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <sc-for list="{{ prompts }}" as="pr" hint-placeholder-count="6">
+                <button onClick="{{ pr.onClick }}" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.02em;color:#6E665A;background:#FFFFFF;border:1.5px solid #ECE7DD;border-radius:999px;padding:8px 13px;cursor:pointer;text-align:left;" style-hover="border-color:#F0623F;color:#F0623F;">{{ pr.text }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-bottom:26px;">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;color:#A39A8B;">Your items</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#F0623F;">{{ invCount }} items · {{ invPairs }} pairs</span>
+          </div>
+          <div style="display:flex;flex-direction:column;">
+            <sc-for list="{{ inventoryItems }}" as="it" hint-placeholder-count="8">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 4px;border-bottom:1px solid #F1ECE3;">
+                <div style="display:flex;align-items:center;gap:14px;">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#C0B7A6;width:22px;flex:none;">{{ it.n }}</span>
+                  <span style="font-size:14.5px;color:#211D18;">{{ it.text }}</span>
+                </div>
+                <button onClick="{{ it.onRemove }}" style="font-family:'DM Sans',sans-serif;font-size:16px;line-height:1;color:#C0B7A6;background:none;border:none;cursor:pointer;padding:4px 8px;" style-hover="color:#C0392B;">×</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="display:flex;gap:9px;margin-bottom:24px;">
+        <input ref="{{ invRef }}" onKeyDown="{{ onInvKey }}" placeholder="e.g. Food or Beverage Brand Founder" style="flex:1;font-family:'DM Sans',sans-serif;font-size:14.5px;color:#211D18;background:#FFFFFF;border:1.5px solid #ECE7DD;border-radius:12px;padding:13px 15px;outline:none;" style-focus="border-color:#F0623F;">
+        <button onClick="{{ onAddInv }}" style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:#FAF8F4;background:#211D18;border:none;border-radius:12px;padding:0 20px;cursor:pointer;">+ Add</button>
+      </div>
+
+      <button onClick="{{ onProceed }}" disabled="{{ cantProceed }}" style="{{ proceedStyle }}">{{ proceedLabel }}</button>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isRatings }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:640px;margin:0 auto;padding:46px 26px 90px;">
+      <div style="margin-bottom:26px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#F0623F;margin-bottom:14px;">02 — Ratings</div>
+        <h2 style="font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-weight:400;font-size:34px;line-height:1.12;margin:0 0 14px;">Score the synergies.</h2>
+        <p style="font-size:15px;line-height:1.7;color:#6E665A;margin:0;">Walk through your pairs one at a time and judge how much the two reinforce each other. This is where the hidden through-lines surface - have fun brainstorming! And don't forget the rating - this is what drives the grouping for step 3.</p>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #ECE7DD;border-radius:20px;box-shadow:0 1px 0 #f3eee5,0 22px 50px -38px rgba(40,30,15,0.5);overflow:hidden;">
+        <div style="height:5px;background:{{ primaryColor }};"></div>
+        <div style="padding:22px 26px 26px;">
+          <div style="display:flex;align-items:center;justify-content:center;gap:12px;padding-bottom:16px;border-bottom:1px solid #F1ECE3;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#8A8174;">{{ pairText }}</span>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;margin:20px 0 4px;flex-wrap:wrap;">
+            <span style="font-family:'DM Serif Display',Georgia,serif;font-size:24px;line-height:1.12;color:#211D18;">{{ srcLabel }}</span>
+            <span style="color:#C9B79C;font-size:18px;">↔</span>
+            <span style="font-family:'DM Serif Display',Georgia,serif;font-size:24px;line-height:1.12;color:#211D18;">{{ tgtLabel }}</span>
+          </div>
+
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:20px 0 22px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.13em;text-transform:uppercase;color:#A39A8B;padding-top:2px;">Question</span>
+            <span style="font-size:14px;line-height:1.55;color:#3a342c;">{{ question }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.13em;text-transform:uppercase;color:#A39A8B;">Scale</span>
+            <span style="font-size:14px;color:#3a342c;">{{ scaleText }}</span>
+          </div>
+
+          <div style="margin:18px 0 22px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.13em;text-transform:uppercase;color:#A39A8B;margin-bottom:8px;">Resulting ideas, questions &amp; notes</div>
+            <textarea key="{{ notesKey }}" ref="{{ notesRef }}" defaultValue="{{ notesDefault }}" rows="3" placeholder="Jot any ideas, questions, or observations sparked by this pair." style="width:100%;font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.55;color:#3a342c;border:1.5px solid #ECE7DD;border-radius:12px;padding:11px 13px;outline:none;resize:none;background:#FCFAF6;" style-focus="border-color:#F0623F;"></textarea>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#A39A8B;">Rating</span>
+            <button onClick="{{ onClear }}" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#F0623F;background:none;border:none;cursor:pointer;">Clear</button>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <sc-for list="{{ anchors }}" as="a" hint-placeholder-count="5">
+              <button onClick="{{ a.onClick }}" style="{{ a.boxStyle }}">
+                <span style="{{ a.numStyle }}">{{ a.num }}</span>
+                <span style="{{ a.labelStyle }}">{{ a.label }}</span>
+              </button>
+            </sc-for>
+          </div>
+
+          <button onClick="{{ onToggleExamples }}" style="display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8A8174;background:none;border:none;cursor:pointer;margin:16px 0 0;padding:4px 0;">
+            <span>{{ examplesCaret }}</span> Example ratings
+          </button>
+          <sc-if value="{{ showExamples }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FCFAF6;border:1px solid #F1ECE3;border-radius:12px;padding:6px 14px;margin-top:8px;">
+              <sc-for list="{{ examples }}" as="ex" hint-placeholder-count="5">
+                <div style="display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #F4EFE6;align-items:baseline;">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:#211D18;width:14px;flex:none;">{{ ex.val }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.04em;text-transform:uppercase;color:#8A8174;width:96px;flex:none;">{{ ex.label }}</span>
+                  <span style="font-size:13px;line-height:1.45;color:#5A5044;">{{ ex.note }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;margin-top:20px;">
+            <button onClick="{{ onRatingSaveNext }}" disabled="{{ ratingCantSave }}" style="{{ ratingSaveStyle }}">{{ ratingSaveLabel }}</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isMatrix }}" hint-placeholder-val="{{ false }}">
+  <main style="max-width:1320px;margin:0 auto;padding:34px 34px 90px;">
+
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:26px;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#F0623F;margin-bottom:10px;">03 — Clustering</div>
+        <h1 style="font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-weight:400;font-size:42px;line-height:1.05;margin:0;letter-spacing:-0.01em;">Scatter into signal.</h1>
+        <p style="font-size:15px;line-height:1.6;color:#6E665A;max-width:520px;margin:12px 0 0;">Each cell scores the synergy between two directions. Click any cell to rate it — the grid clusters your interests into the through-lines hiding in plain sight.</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;">
+        <button onClick="{{ onRecommend }}" style="display:inline-flex;align-items:center;gap:7px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#FAF8F4;background:#211D18;border:none;border-radius:10px;padding:10px 16px;cursor:pointer;" style-hover="background:#3a332a;">{{ recLabel }}</button>
+        <button onClick="{{ onResort }}" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#211D18;background:#FFFFFF;border:1.5px solid #ECE7DD;border-radius:10px;padding:10px 16px;cursor:pointer;" style-hover="border-color:#211D18;">Re-sort</button>
+        <button onClick="{{ onAddItem }}" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#211D18;background:#FFFFFF;border:1.5px solid #ECE7DD;border-radius:10px;padding:10px 16px;cursor:pointer;" style-hover="border-color:#211D18;">+ Add</button>
+        <button onClick="{{ onExport }}" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#211D18;background:#FFFFFF;border:1.5px solid #ECE7DD;border-radius:10px;padding:10px 16px;cursor:pointer;" style-hover="border-color:#211D18;">Export CSV</button>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0;background:#FFFFFF;border:1px solid #ECE7DD;border-radius:18px;overflow:hidden;margin-bottom:30px;box-shadow:0 1px 0 #f3eee5,0 18px 40px -34px rgba(40,30,15,0.5);">
+      <div style="width:6px;flex:none;background:{{ primaryColor }};"></div>
+      <div style="padding:22px 26px;display:flex;align-items:center;gap:40px;flex-wrap:wrap;flex:1;">
+        <div style="min-width:240px;flex:1;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8A8174;margin-bottom:8px;">Your emerging through-line</div>
+          <div style="font-family:'DM Serif Display',Georgia,serif;font-size:27px;line-height:1.12;color:#211D18;">{{ primaryName }}</div>
+          <div style="font-size:13.5px;color:#6E665A;margin-top:7px;line-height:1.5;">{{ primaryNote }}</div>
+        </div>
+        <div style="min-width:300px;flex:1.3;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#A39A8B;margin-bottom:11px;">Strongest connections</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <sc-for list="{{ topConns }}" as="conn" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;gap:11px;">
+                <div style="width:24px;height:24px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:#fff;background:{{ conn.color }};">{{ conn.s }}</div>
+                <span style="font-size:13.5px;color:#3a342c;">{{ conn.text }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="im-scroll" style="overflow:auto;padding:6px 4px 14px;border:1px solid #ECE7DD;border-radius:16px;background:#FFFFFF;">
+      <div style="display:inline-block;min-width:100%;padding:14px 22px 18px;">
+        <div style="display:flex;align-items:flex-end;">
+          <div style="width:{{ labelGap }}px;flex:none;height:158px;"></div>
+          <sc-for list="{{ columns }}" as="col" hint-placeholder-count="30">
+            <div style="width:30px;flex:none;height:158px;position:relative;">
+              <span style="position:absolute;left:50%;bottom:5px;transform-origin:0 100%;transform:rotate(-52deg);white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.01em;color:{{ col.color }};opacity:{{ col.op }};">{{ col.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <sc-for list="{{ rows }}" as="row" hint-placeholder-count="30">
+          <div style="display:flex;align-items:center;margin-bottom:3px;">
+            <div style="width:{{ labelGap }}px;flex:none;display:flex;align-items:center;justify-content:flex-end;gap:7px;padding-right:9px;opacity:{{ row.op }};">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.18;letter-spacing:0.005em;color:{{ row.color }};text-align:right;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:150px;">{{ row.label }}</span>
+              <button onClick="{{ row.infoClick }}" style="width:17px;height:17px;flex:none;border-radius:50%;border:1.2px solid #D9D2C6;background:#FFFFFF;color:#A39A8B;font-family:'DM Serif Display',serif;font-style:italic;font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;" style-hover="border-color:#F0623F;color:#F0623F;">i</button>
+            </div>
+            <div style="display:flex;gap:3px;">
+              <sc-for list="{{ row.cells }}" as="cell" hint-placeholder-count="30">
+                <div id="{{ cell.id }}" style="{{ cell.style }}" onClick="{{ cell.onClick }}">{{ cell.val }}</div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:22px;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#A39A8B;">Clusters</span>
+      <sc-for list="{{ legendChips }}" as="chip" hint-placeholder-count="5">
+        <button onClick="{{ chip.onClick }}" style="{{ chip.style }}">
+          <span style="{{ chip.dotStyle }}"></span>
+          <span style="{{ chip.nameStyle }}">{{ chip.name }}</span>
+          <span style="{{ chip.countStyle }}">{{ chip.count }}</span>
+        </button>
+      </sc-for>
+      <span style="font-size:12.5px;color:#A39A8B;margin-left:2px;">Select a cluster to focus it and read its notes.</span>
+    </div>
+
+    <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:18px;border:1px solid #ECE7DD;border-radius:16px;background:#FFFFFF;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:10px;padding:16px 22px;border-bottom:1px solid #F1ECE3;">
+          <span style="width:13px;height:13px;border-radius:4px;background:{{ selColor }};"></span>
+          <span style="font-family:'DM Serif Display',serif;font-style:italic;font-size:19px;">{{ selName }}</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#A39A8B;">— resulting ideas &amp; notes</span>
+        </div>
+        <div style="padding:8px 22px 20px;">
+          <sc-if value="{{ hasNotes }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:14px;padding-top:12px;">
+              <sc-for list="{{ clusterNotes }}" as="note" hint-placeholder-count="2">
+                <div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:{{ selColor }};margin-bottom:4px;">{{ note.pair }}</div>
+                  <div style="font-size:14px;line-height:1.55;color:#3a342c;">{{ note.body }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noNotes }}" hint-placeholder-val="{{ true }}">
+            <p style="font-size:13.5px;color:#A39A8B;margin:14px 0 2px;">No notes yet for this cluster. Open a cell within it and jot any idea, question, or observation sparked by the pair.</p>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+  </main>
+
+    <sc-if value="{{ showCoach }}" hint-placeholder-val="{{ false }}">
+      <div ref="{{ coachRef }}" style="position:fixed;left:0;top:0;opacity:0;z-index:70;width:264px;transition:opacity .2s;">
+        <div style="position:relative;background:#211D18;color:#FAF8F4;border-radius:13px;padding:15px 16px;box-shadow:0 22px 48px -18px rgba(0,0,0,0.55);">
+          <span data-coach-arrow="1" style="position:absolute;left:24px;top:-7px;width:14px;height:14px;background:#211D18;transform:rotate(45deg);border-radius:3px;"></span>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:#F0623F;margin-bottom:7px;">Tip · keep going</div>
+          <p style="font-size:13px;line-height:1.5;margin:0 0 13px;">Now click here to continue exploring the rest of the intersections.</p>
+          <button onClick="{{ onCoachDismiss }}" style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:#211D18;background:#FAF8F4;border:none;border-radius:8px;padding:7px 14px;cursor:pointer;">Got it</button>
+        </div>
+      </div>
+    </sc-if>
+  </sc-if>
+
+  <sc-if value="{{ popoverOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:55;" onClick="{{ onPopClose }}"></div>
+    <div style="{{ popStyle }}">
+      <div style="background:#FFFFFF;border:1px solid #E6E0D5;border-radius:16px;box-shadow:0 24px 60px -22px rgba(40,30,15,0.45);overflow:hidden;">
+        <div style="height:5px;background:{{ popColor }};"></div>
+        <div style="padding:16px 18px 18px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#A39A8B;margin-bottom:6px;">Item</div>
+          <input key="{{ popName }}" ref="{{ nameRef }}" defaultValue="{{ popName }}" style="width:100%;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:600;color:#211D18;border:none;border-bottom:1.5px solid #ECE7DD;padding:2px 0 7px;outline:none;background:transparent;" style-focus="border-bottom-color:#F0623F;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#A39A8B;margin:14px 0 6px;">Description</div>
+          <textarea key="{{ popStyle }}" ref="{{ descRef }}" defaultValue="{{ popDesc }}" rows="3" placeholder="A short description of this direction." style="width:100%;font-family:'DM Sans',sans-serif;font-size:13.5px;line-height:1.5;color:#3a342c;border:1.5px solid #ECE7DD;border-radius:10px;padding:9px 11px;outline:none;resize:none;background:#FCFAF6;" style-focus="border-color:#F0623F;"></textarea>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;">
+            <button onClick="{{ onPopDelete }}" style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:600;color:#C0392B;background:transparent;border:none;cursor:pointer;padding:6px 2px;">Delete item</button>
+            <button onClick="{{ onPopDone }}" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#FAF8F4;background:#211D18;border:none;border-radius:9px;padding:8px 18px;cursor:pointer;">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:24px;">
+      <div style="position:absolute;inset:0;background:rgba(33,29,24,0.34);backdrop-filter:blur(2px);" onClick="{{ onClose }}"></div>
+      <div style="position:relative;width:560px;max-width:100%;max-height:92vh;overflow:auto;background:#FFFFFF;border-radius:22px;box-shadow:0 40px 90px -30px rgba(33,24,12,0.6);" class="im-scroll">
+        <div style="padding:22px 26px 26px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid #F1ECE3;">
+            <button onClick="{{ onPrev }}" disabled="{{ noPrev }}" style="{{ prevStyle }}">← Prev</button>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#8A8174;">{{ pairText }}</span>
+            <button onClick="{{ onNext }}" disabled="{{ noNext }}" style="{{ nextStyle }}">Next →</button>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;margin:20px 0 4px;flex-wrap:wrap;">
+            <span style="font-family:'DM Serif Display',Georgia,serif;font-size:24px;line-height:1.12;color:#211D18;">{{ srcLabel }}</span>
+            <span style="color:#C9B79C;font-size:18px;">↔</span>
+            <span style="font-family:'DM Serif Display',Georgia,serif;font-size:24px;line-height:1.12;color:#211D18;">{{ tgtLabel }}</span>
+          </div>
+
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:20px 0 22px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.13em;text-transform:uppercase;color:#A39A8B;padding-top:2px;">Question</span>
+            <span style="font-size:14px;line-height:1.55;color:#3a342c;">{{ question }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.13em;text-transform:uppercase;color:#A39A8B;">Scale</span>
+            <span style="font-size:14px;color:#3a342c;">{{ scaleText }}</span>
+          </div>
+
+          <div style="margin:18px 0 22px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.13em;text-transform:uppercase;color:#A39A8B;margin-bottom:8px;">Resulting ideas, questions &amp; notes</div>
+            <textarea key="{{ notesKey }}" ref="{{ notesRef }}" defaultValue="{{ notesDefault }}" rows="3" placeholder="Jot any ideas, questions, or observations sparked by this pair." style="width:100%;font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.55;color:#3a342c;border:1.5px solid #ECE7DD;border-radius:12px;padding:11px 13px;outline:none;resize:none;background:#FCFAF6;" style-focus="border-color:#F0623F;"></textarea>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#A39A8B;">Rating</span>
+            <button onClick="{{ onClear }}" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#F0623F;background:none;border:none;cursor:pointer;">Clear</button>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <sc-for list="{{ anchors }}" as="a" hint-placeholder-count="5">
+              <button onClick="{{ a.onClick }}" style="{{ a.boxStyle }}">
+                <span style="{{ a.numStyle }}">{{ a.num }}</span>
+                <span style="{{ a.labelStyle }}">{{ a.label }}</span>
+              </button>
+            </sc-for>
+          </div>
+
+          <button onClick="{{ onToggleExamples }}" style="display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8A8174;background:none;border:none;cursor:pointer;margin:16px 0 0;padding:4px 0;">
+            <span>{{ examplesCaret }}</span> Example ratings
+          </button>
+          <sc-if value="{{ showExamples }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FCFAF6;border:1px solid #F1ECE3;border-radius:12px;padding:6px 14px;margin-top:8px;">
+              <sc-for list="{{ examples }}" as="ex" hint-placeholder-count="5">
+                <div style="display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #F4EFE6;align-items:baseline;">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:#211D18;width:14px;flex:none;">{{ ex.val }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.04em;text-transform:uppercase;color:#8A8174;width:96px;flex:none;">{{ ex.label }}</span>
+                  <span style="font-size:13px;line-height:1.45;color:#5A5044;">{{ ex.note }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-top:20px;">
+            <button onClick="{{ onClose }}" style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:#211D18;background:#FFFFFF;border:1.5px solid #ECE7DD;border-radius:11px;padding:11px 20px;cursor:pointer;">Close</button>
+            <button onClick="{{ onSaveNext }}" style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:#FAF8F4;background:#F0623F;border:none;border-radius:11px;padding:11px 22px;cursor:pointer;box-shadow:0 8px 20px -10px rgba(240,98,63,0.8);">{{ saveLabel }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ recDialogOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:24px;">
+      <div style="position:absolute;inset:0;background:rgba(33,29,24,0.4);backdrop-filter:blur(2px);" onClick="{{ onCloseRecDialog }}"></div>
+      <div style="position:relative;width:440px;max-width:100%;background:#FFFFFF;border-radius:20px;box-shadow:0 40px 90px -30px rgba(33,24,12,0.6);overflow:hidden;">
+        <div style="height:6px;background:linear-gradient(90deg,#27AE7A,#1FA0B8,#3D7DE0,#8163DC,#D45BB0);"></div>
+        <div style="padding:28px 30px 26px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#F0623F;margin-bottom:12px;">Coming soon</div>
+          <h3 style="font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-weight:400;font-size:27px;line-height:1.15;margin:0 0 14px;">Smart recommendations are on the way.</h3>
+          <p style="font-size:14.5px;line-height:1.65;color:#6E665A;margin:0 0 14px;">Auto-suggesting synergy scores for unrated pairs is a feature we're still building. It takes real research and engineering to do it well — and honestly, to do it at all.</p>
+          <p style="font-size:14.5px;line-height:1.65;color:#6E665A;margin:0 0 22px;">If you'd love to see it sooner, reach out to the developer — a small donation directly funds development and bumps this up the list.</p>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <a href="mailto:hello@throughline.app?subject=Recommend%20values%20feature%20%2B%20donation" style="display:inline-flex;align-items:center;gap:7px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;text-decoration:none;color:#FAF8F4;background:#211D18;border-radius:11px;padding:11px 20px;cursor:pointer;">Support development</a>
+            <button onClick="{{ onCloseRecDialog }}" style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:#211D18;background:#FFFFFF;border:1.5px solid #ECE7DD;border-radius:11px;padding:11px 18px;cursor:pointer;">Maybe later</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1320,&quot;height&quot;:920},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#F0623F&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;cellSize&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:30,&quot;min&quot;:24,&quot;max&quot;:40,&quot;tsType&quot;:&quot;number&quot;},&quot;showValues&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const items = [0, 1, 7, 10, 11].map((k, i) => { const [text, cat, description] = Component.CAREERS[k]; return { id: 'i' + i, text, cat, description }; });
+    const strengths = this.buildStrengths(items);
+    this.notesRef = React.createRef();
+    this.nameRef = React.createRef();
+    this.descRef = React.createRef();
+    this.invRef = React.createRef();
+    this.coachRef = React.createRef();
+    const layout = this.computeLayout(items, strengths, false, 0);
+    this.state = {
+      items, strengths, notes: {},
+      ...layout, useKmeans: false, seed: 0,
+      modalOpen: false, mi: null, mj: null, pendingScore: null, showExamples: false,
+      popoverOpen: false, pidx: null, px: 0, py: 0,
+      selectedCluster: null, recommending: false,
+      phase: 'landing', landingCells: this.initLandingCells(),
+    };
+  }
+
+  initLandingCells() {
+    const a = [];
+    for (let i = 0; i < 81; i++) {
+      const r = Math.floor(i / 9), c = i % 9;
+      if (r >= c) { a.push(0); continue; }
+      const v = (r * 13 + c * 7) % 9;
+      a.push(v < 2 ? 5 : v < 4 ? 4 : v < 5 ? 3 : v < 7 ? 2 : 1);
+    }
+    return a;
+  }
+  componentDidMount() {
+    this._coachTimer = setInterval(() => this.positionCoach(), 80);
+    this._tick = setInterval(() => {
+      if (this.state.phase !== 'landing') return;
+      this.setState(s => {
+        const cells = s.landingCells.slice();
+        const i = Math.floor(Math.random() * 81);
+        const r = Math.floor(i / 9), c = i % 9;
+        if (r >= c) return null;
+        let v = cells[i] === 0 ? Math.ceil(Math.random() * 5) : cells[i] + (Math.random() > 0.5 ? 1 : -1);
+        v = Math.max(1, Math.min(5, v));
+        cells[i] = v;
+        return { landingCells: cells };
+      });
+    }, 130);
+  }
+  componentWillUnmount() { clearInterval(this._tick); clearInterval(this._coachTimer); }
+  positionCoach() {
+    const tip = this.coachRef && this.coachRef.current;
+    const el = this._coachId && document.getElementById(this._coachId);
+    if (!tip) return;
+    if (!this.state.showCoach || !el) { tip.style.opacity = '0'; return; }
+    {
+      const r = el.getBoundingClientRect();
+      const tw = tip.offsetWidth || 264, th = tip.offsetHeight || 96;
+      let left = r.left + r.width / 2 - tw / 2;
+      left = Math.max(12, Math.min(left, window.innerWidth - tw - 12));
+      let top = r.bottom + 14, arrow = 'top';
+      if (top + th > window.innerHeight - 12) { top = r.top - th - 14; arrow = 'bottom'; }
+      tip.style.left = left + 'px'; tip.style.top = top + 'px'; tip.style.opacity = '1';
+      const ar = tip.querySelector('[data-coach-arrow]');
+      if (ar) {
+        const ax = Math.max(14, Math.min(r.left + r.width / 2 - left, tw - 14));
+        ar.style.left = ax + 'px';
+        ar.style.top = arrow === 'top' ? '-7px' : 'auto';
+        ar.style.bottom = arrow === 'bottom' ? '-7px' : 'auto';
+      }
+    }
+  }
+  dismissCoach() { this.setState({ showCoach: false }); }
+  setPhase(p) { this.setState({ phase: p }); }
+  goRatings() {
+    let { mi, mj, order, strengths } = this.state;
+    if (mi == null || mj == null || mi >= strengths.length || mj >= strengths.length) { mi = order[0]; mj = order[1]; }
+    this.setState({ phase: 'ratings', mi, mj, pendingScore: null, showExamples: false });
+  }
+  ratingSaveNext() {
+    this.commit();
+    if (!this.state.firstSaveDone) { this.setState({ firstSaveDone: true, phase: 'matrix', showCoach: true }); return; }
+    const np = this.nextPair(this.state.mi, this.state.mj);
+    if (np) this.setState({ mi: np[0], mj: np[1], pendingScore: null, showExamples: false });
+    else this.setState({ phase: 'matrix' });
+  }
+
+  // ---- color helpers ----
+  mix(a, b, t) {
+    const pa = p => [parseInt(p.slice(1, 3), 16), parseInt(p.slice(3, 5), 16), parseInt(p.slice(5, 7), 16)];
+    const [r1, g1, b1] = pa(a), [r2, g2, b2] = pa(b);
+    const h = x => Math.max(0, Math.min(255, Math.round(x))).toString(16).padStart(2, '0');
+    return '#' + h(r1 * (1 - t) + r2 * t) + h(g1 * (1 - t) + g2 * t) + h(b1 * (1 - t) + b2 * t);
+  }
+  ramp(hex, s) {
+    const w = [0, 0.85, 0.67, 0.46, 0.25, 0.06][s];
+    let c = this.mix(hex, '#FFFFFF', w);
+    if (s >= 5) c = this.mix(c, '#16110D', 0.05);
+    return c;
+  }
+  fg(s) { return s >= 3 ? '#FFFFFF' : '#6A5F4E'; }
+  pk(i, j) { return i <= j ? i + ':' + j : j + ':' + i; }
+
+  // ---- data ----
+  buildStrengths(items) {
+    const n = items.length;
+    const m = Array.from({ length: n }, () => Array(n).fill(null));
+    const REL = new Set(['food|pet', 'food|lead', 'mission|pet', 'mission|science', 'lead|mission', 'pet|science']);
+    const rel = (a, b) => REL.has([a, b].sort().join('|'));
+    for (let i = 0; i < n; i++) {
+      m[i][i] = 5;
+      for (let j = i + 1; j < n; j++) {
+        const a = items[i], b = items[j];
+        const h = (((i + 1) * 73856093) ^ ((j + 1) * 19349663)) >>> 0;
+        const r = (h % 1000) / 1000;
+        let v;
+        if (a.cat === b.cat) v = r < 0.5 ? 5 : (r < 0.82 ? 4 : 3);
+        else if (rel(a.cat, b.cat)) v = r < 0.45 ? 3 : 2;
+        else v = r < 0.5 ? 1 : 2;
+        if ((a.text === 'Cat Cafe Owner' && b.cat === 'food') || (b.text === 'Cat Cafe Owner' && a.cat === 'food')) v = Math.max(v, 4);
+        if (a.cat !== b.cat && !rel(a.cat, b.cat) && h % 5 === 0) v = null;
+        m[i][j] = v; m[j][i] = v;
+      }
+    }
+    return m;
+  }
+
+  mulberry(a) {
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      let t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  kmeans(vectors, k, seed) {
+    const n = vectors.length;
+    if (n === 0) return [];
+    const dim = vectors[0].length;
+    const rng = this.mulberry(seed || 1);
+    const idxs = [];
+    while (idxs.length < k && idxs.length < n) { const r = Math.floor(rng() * n); if (!idxs.includes(r)) idxs.push(r); }
+    let cent = idxs.map(i => vectors[i].slice());
+    const assign = new Array(n).fill(0);
+    for (let it = 0; it < 25; it++) {
+      for (let i = 0; i < n; i++) {
+        let bd = Infinity, bc = 0;
+        for (let c = 0; c < cent.length; c++) {
+          let d = 0; const v = vectors[i], ce = cent[c];
+          for (let t = 0; t < dim; t++) { const df = v[t] - ce[t]; d += df * df; }
+          if (d < bd) { bd = d; bc = c; }
+        }
+        assign[i] = bc;
+      }
+      const sum = Array.from({ length: k }, () => new Array(dim).fill(0));
+      const cnt = new Array(k).fill(0);
+      for (let i = 0; i < n; i++) { const c = assign[i]; cnt[c]++; const v = vectors[i]; for (let t = 0; t < dim; t++) sum[c][t] += v[t]; }
+      for (let c = 0; c < k; c++) {
+        if (cnt[c] === 0) cent[c] = vectors[Math.floor(rng() * n)].slice();
+        else for (let t = 0; t < dim; t++) cent[c][t] = sum[c][t] / cnt[c];
+      }
+    }
+    return assign;
+  }
+
+  computeLayout(items, strengths, useKmeans, seed) {
+    const n = items.length;
+    let cluster;
+    if (useKmeans) cluster = this.kmeans(strengths.map(r => r.map(v => v == null ? 0 : v)), 5, seed);
+    else { const CI = { food: 0, pet: 1, mission: 2, science: 3, lead: 4 }; cluster = items.map(it => CI[it.cat] ?? 4); }
+    const ids = [...new Set(cluster)];
+    const sizes = {}; ids.forEach(c => sizes[c] = cluster.filter(x => x === c).length);
+    const rank = ids.slice().sort((a, b) => sizes[b] - sizes[a] || a - b);
+    const clusterHue = {}; rank.forEach((c, i) => clusterHue[c] = i % Component.BASE.length);
+    const order = []; rank.forEach(c => { for (let i = 0; i < n; i++) if (cluster[i] === c) order.push(i); });
+    const pos = new Array(n); order.forEach((di, p) => pos[di] = p);
+    const CN = { food: 'Food & Hospitality', pet: 'Pets & Animals', mission: 'Mission & Nonprofit', science: 'Science & Museums', lead: 'Leadership & Events' };
+    const names = {};
+    ids.forEach(c => {
+      const cnt = {}; items.forEach((it, i) => { if (cluster[i] === c) cnt[it.cat] = (cnt[it.cat] || 0) + 1; });
+      const top = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0];
+      names[c] = CN[top] || 'Cluster';
+    });
+    let primary = rank[0], best = -1;
+    ids.forEach(c => {
+      const mem = []; for (let i = 0; i < n; i++) if (cluster[i] === c) mem.push(i);
+      let tot = 0; for (let x = 0; x < mem.length; x++) for (let y = x + 1; y < mem.length; y++) { const s = strengths[mem[x]][mem[y]]; if (s) tot += s; }
+      if (tot > best) { best = tot; primary = c; }
+    });
+    return { cluster, order, pos, clusterHue, clusterIds: rank, names, primary, sizes };
+  }
+
+  // ---- pair navigation (display order) ----
+  nextPair(i, j) {
+    const { pos, order } = this.state; const n = order.length;
+    let p = pos[i], q = pos[j]; if (p > q) { const t = p; p = q; q = t; }
+    let np; if (q < n - 1) np = [p, q + 1]; else if (p < n - 2) np = [p + 1, p + 2]; else return null;
+    return [order[np[0]], order[np[1]]];
+  }
+  prevPair(i, j) {
+    const { pos, order } = this.state; const n = order.length;
+    let p = pos[i], q = pos[j]; if (p > q) { const t = p; p = q; q = t; }
+    let np; if (q > p + 1) np = [p, q - 1]; else if (p > 0) np = [p - 1, n - 1]; else return null;
+    return [order[np[0]], order[np[1]]];
+  }
+  ordinal(i, j) {
+    const { pos, order } = this.state; const n = order.length;
+    let p = pos[i], q = pos[j]; if (p > q) { const t = p; p = q; q = t; }
+    return p * n - p * (p + 1) / 2 + (q - p - 1) + 1;
+  }
+
+  // ---- modal / rating ----
+  openModal(i, j) { this.setState({ modalOpen: true, mi: i, mj: j, pendingScore: this.state.strengths[i][j], showExamples: false, showCoach: false }); }
+  selectScore(v) { this.setState({ pendingScore: v }); }
+  clearScore() { this.setState({ pendingScore: null }); }
+  toggleExamples() { this.setState(s => ({ showExamples: !s.showExamples })); }
+  commit() {
+    const { mi, mj, strengths, pendingScore, notes } = this.state;
+    if (mi == null) return;
+    const ns = strengths.map(r => r.slice());
+    if (pendingScore != null) { ns[mi][mj] = pendingScore; ns[mj][mi] = pendingScore; }
+    const key = this.pk(mi, mj);
+    const nn = { ...notes };
+    const t = this.notesRef.current ? this.notesRef.current.value.trim() : (notes[key] || '');
+    if (t) nn[key] = t; else delete nn[key];
+    this.setState({ strengths: ns, notes: nn });
+  }
+  closeModalSaving() { this.commit(); this.setState({ modalOpen: false }); }
+  saveAndNext() {
+    this.commit();
+    const np = this.nextPair(this.state.mi, this.state.mj);
+    if (np) this.setState({ mi: np[0], mj: np[1], pendingScore: this.state.strengths[np[0]][np[1]], showExamples: false });
+    else this.setState({ modalOpen: false });
+  }
+  nav(dir) {
+    this.commit();
+    const np = dir > 0 ? this.nextPair(this.state.mi, this.state.mj) : this.prevPair(this.state.mi, this.state.mj);
+    const fresh = this.state.phase === 'ratings';
+    if (np) this.setState({ mi: np[0], mj: np[1], pendingScore: fresh ? null : this.state.strengths[np[0]][np[1]], showExamples: false });
+  }
+
+  // ---- popover / items ----
+  openPopover(di, e) { if (e && e.stopPropagation) e.stopPropagation(); this.setState({ popoverOpen: true, pidx: di, px: (e ? e.clientX : 200), py: (e ? e.clientY : 200) }); }
+  closePopover() { this.setState({ popoverOpen: false }); }
+  savePopover() {
+    const idx = this.state.pidx; if (idx == null) return;
+    const items = this.state.items.map(x => ({ ...x }));
+    const name = this.nameRef.current ? this.nameRef.current.value.trim() : '';
+    if (name) items[idx].text = name;
+    if (this.descRef.current) items[idx].description = this.descRef.current.value;
+    this.setState({ items, popoverOpen: false });
+  }
+  deleteByIndex(idx) {
+    if (idx == null) return;
+    const items = this.state.items.filter((_, i) => i !== idx);
+    const strengths = this.state.strengths.filter((_, i) => i !== idx).map(r => r.filter((_, j) => j !== idx));
+    const notes = {};
+    for (const [k, v] of Object.entries(this.state.notes)) {
+      let [a, b] = k.split(':').map(Number);
+      if (a === idx || b === idx) continue;
+      if (a > idx) a--; if (b > idx) b--;
+      notes[this.pk(a, b)] = v;
+    }
+    const layout = this.computeLayout(items, strengths, this.state.useKmeans, this.state.seed);
+    this.setState({ items, strengths, notes, ...layout, popoverOpen: false, selectedCluster: null });
+  }
+  deleteItem() { this.deleteByIndex(this.state.pidx); }
+  removeInventoryItem(idx) { this.deleteByIndex(idx); }
+  addItemCore(text, cat, openPop) {
+    const items = this.state.items.map(x => ({ ...x }));
+    items.push({ id: 'i' + Date.now(), text, cat, description: '' });
+    const strengths = this.state.strengths.map(r => r.slice());
+    for (const row of strengths) row.push(null);
+    const nr = new Array(items.length).fill(null); nr[items.length - 1] = 5; strengths.push(nr);
+    const layout = this.computeLayout(items, strengths, this.state.useKmeans, this.state.seed);
+    const patch = { items, strengths, ...layout };
+    if (openPop) { patch.popoverOpen = true; patch.pidx = items.length - 1; patch.px = window.innerWidth / 2 - 150; patch.py = 150; }
+    this.setState(patch);
+  }
+  addItem() { this.addItemCore('New direction', 'lead', true); }
+  addFromInventory() {
+    const el = this.invRef.current; if (!el) return;
+    const t = el.value.trim(); if (!t) { return; }
+    if (this.state.items.some(i => i.text.toLowerCase() === t.toLowerCase())) { el.value = ''; return; }
+    this.addItemCore(t, 'lead', false); el.value = '';
+  }
+  setPrompt(p) { if (this.invRef.current) { this.invRef.current.value = p; this.invRef.current.focus(); } }
+  toggleHints() { this.setState(s => ({ hintsOpen: !s.hintsOpen })); }
+
+  // ---- toolbar ----
+  resort() {
+    const seed = (Date.now() % 100000) + 7;
+    const layout = this.computeLayout(this.state.items, this.state.strengths, true, seed);
+    this.setState({ useKmeans: true, seed, ...layout, selectedCluster: null });
+  }
+  recommend() { this.setState({ recDialogOpen: true }); }
+  closeRecDialog() { this.setState({ recDialogOpen: false }); }
+  exportCsv() {
+    const { items, strengths } = this.state;
+    const esc = s => { s = String(s == null ? '' : s); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+    const ids = items.map(e => e.text);
+    const head = ['', ...ids].map(esc).join(',');
+    const rows = items.map((e, i) => [e.text, ...strengths[i].map(v => v == null ? '' : v)].map(esc).join(','));
+    const csv = [head, ...rows].join('\r\n');
+    try {
+      const blob = new Blob(['\ufeff' + csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'insight-matrix.csv';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) { console.warn('export failed', e); }
+  }
+  selectCluster(cid) { this.setState(s => ({ selectedCluster: s.selectedCluster === cid ? null : cid })); }
+
+  renderVals() {
+    const S = this.state;
+    const { items, strengths, order, pos, cluster, clusterHue, names, primary, clusterIds, selectedCluster } = S;
+    const ACC = this.props.accent ?? '#F0623F';
+    const CS = this.props.cellSize ?? 30;
+    const SHOW = this.props.showValues ?? true;
+    const BASE = Component.BASE;
+    const n = order.length;
+    const LABELW = 190;
+    const NEUTRAL = '#EEEAE2';
+    const FS = Math.max(9, Math.round(CS / 2.7));
+
+    let rated = 0; const total = n * (n - 1) / 2;
+    for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if (strengths[i][j] != null) rated++;
+    const progressPct = Math.round(rated / total * 100) + '%';
+    const dim = cid => selectedCluster != null && cid !== selectedCluster;
+
+    const columns = order.map(di => ({ label: items[di].text, color: BASE[clusterHue[cluster[di]]], op: dim(cluster[di]) ? 0.3 : 1 }));
+
+    let coachId = null;
+    if (S.showCoach) {
+      for (let q = 0; q < n && !coachId; q++) for (let p = 0; p < q && !coachId; p++) {
+        if (strengths[order[q]][order[p]] == null) coachId = 'c' + q + '_' + p;
+      }
+      if (!coachId && S.mi != null && S.mj != null) {
+        const np = this.nextPair(S.mi, S.mj);
+        if (np) { const a = pos[np[0]], b = pos[np[1]]; coachId = 'c' + Math.max(a, b) + '_' + Math.min(a, b); }
+      }
+    }
+    this._coachId = coachId;
+
+    const rows = order.map((di, ri) => {
+      const rc = cluster[di];
+      const cells = order.map((dj, ci) => {
+        const i = di, j = dj; const isDiag = i === j;
+        const thisId = 'c' + ri + '_' + ci;
+        const isCoach = !!coachId && thisId === coachId;
+        let bg, fg = '#FFFFFF', val = '', ocl;
+        if (isDiag) { ocl = cluster[i]; bg = this.ramp(BASE[clusterHue[ocl]], 5); fg = '#FFFFFF'; }
+        else {
+          const owner = pos[i] >= pos[j] ? i : j; ocl = cluster[owner];
+          const s = strengths[i][j];
+          if (s == null) { bg = NEUTRAL; fg = '#B8B0A2'; val = ''; }
+          else { bg = this.ramp(BASE[clusterHue[ocl]], s); fg = this.fg(s); val = SHOW ? String(s) : ''; }
+        }
+        const dd = dim(ocl) ? 0.2 : 1;
+        const ring = S.modalOpen && ((i === S.mi && j === S.mj) || (i === S.mj && j === S.mi));
+        const style = `width:${CS}px;height:${CS}px;flex:none;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:${FS}px;font-weight:600;border-radius:5px;background:${bg};color:${fg};opacity:${isCoach ? 1 : dd};box-sizing:border-box;${isDiag ? 'cursor:default;' : 'cursor:pointer;'}${isCoach ? `outline:3px solid ${ACC};outline-offset:-1px;z-index:6;position:relative;animation:coachpulse 1.4s ease-in-out infinite;` : ring ? `outline:2.5px solid ${ACC};outline-offset:-1px;z-index:2;box-shadow:0 0 0 3px ${this.mix(ACC, '#FFFFFF', 0.6)};` : ''}transition:opacity .2s;`;
+        return { key: i + '_' + j, id: thisId, style, val, onClick: isDiag ? undefined : () => this.openModal(i, j) };
+      });
+      return { label: items[di].text, color: BASE[clusterHue[rc]], op: dim(rc) ? 0.32 : 1, infoClick: e => this.openPopover(di, e), cells };
+    });
+
+    const memP = []; for (let i = 0; i < n; i++) if (cluster[i] === primary) memP.push(i);
+    const conns = [];
+    for (let x = 0; x < memP.length; x++) for (let y = x + 1; y < memP.length; y++) { const s = strengths[memP[x]][memP[y]]; if (s) conns.push({ a: items[memP[x]].text, b: items[memP[y]].text, s }); }
+    conns.sort((p, q) => q.s - p.s);
+    const primaryColor = BASE[clusterHue[primary]];
+    const topConns = conns.slice(0, 3).map(c => ({ text: c.a + '  ↔  ' + c.b, s: c.s, color: primaryColor }));
+    const primaryName = names[primary];
+    const primaryNote = memP.length + ' directions cluster here — the densest web of overlap in your matrix.';
+
+    const legendChips = clusterIds.map(cid => {
+      const sel = selectedCluster === cid; const color = BASE[clusterHue[cid]]; const count = S.sizes[cid];
+      return {
+        name: names[cid], color, count, primary: cid === primary, onClick: () => this.selectCluster(cid),
+        style: `display:flex;align-items:center;gap:9px;padding:8px 13px 8px 10px;border-radius:999px;cursor:pointer;border:1.5px solid ${sel ? color : '#ECE7DD'};background:${sel ? this.mix(color, '#FFFFFF', 0.88) : '#FFFFFF'};transition:all .15s;`,
+        dotStyle: `width:13px;height:13px;border-radius:4px;background:${color};flex:none;`,
+        nameStyle: `font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.02em;color:#211D18;`,
+        countStyle: `font-family:'JetBrains Mono',monospace;font-size:10px;color:#8A8174;`,
+      };
+    });
+
+    const hasSel = selectedCluster != null;
+    const selName = hasSel ? names[selectedCluster] : '';
+    const selColor = hasSel ? BASE[clusterHue[selectedCluster]] : ACC;
+    const clusterNotes = [];
+    if (hasSel) for (const [key, body] of Object.entries(S.notes)) {
+      if (!body) continue;
+      const [a, b] = key.split(':').map(Number);
+      if (cluster[a] === selectedCluster || cluster[b] === selectedCluster) clusterNotes.push({ pair: items[a].text + '  ↔  ' + items[b].text, body });
+    }
+
+    const labels = ['Rarely', 'Occasionally', 'Sometimes', 'Often', 'Almost always'];
+    const exNotes = ['The skills seldom turn up in the same job.', 'Only an incidental, here-and-there overlap.', 'They overlap in some roles but not others — it depends.', 'The two skill sets frequently show up in the same role.', 'A job needing one almost always requires or benefits from the other.'];
+    const anchors = [1, 2, 3, 4, 5].map((v, i) => {
+      const sel = S.pendingScore === v;
+      return {
+        label: labels[i], num: v,
+        boxStyle: `flex:1;display:flex;flex-direction:column;align-items:center;gap:9px;padding:15px 6px;border-radius:15px;cursor:pointer;transition:all .12s;border:1.5px solid ${sel ? ACC : '#ECE7DD'};background:${sel ? this.mix(ACC, '#FFFFFF', 0.93) : '#FFFFFF'};`,
+        numStyle: `width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600;background:${sel ? ACC : '#F4F1EA'};color:${sel ? '#FFFFFF' : '#211D18'};`,
+        labelStyle: `font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.03em;text-align:center;line-height:1.25;color:${sel ? this.mix(ACC, '#16110D', 0.25) : '#6E665A'};`,
+        onClick: () => this.selectScore(v),
+      };
+    });
+    const examples = [1, 2, 3, 4, 5].map((v, i) => ({ val: v, label: labels[i], note: exNotes[i] }));
+
+    let srcLabel = '—', tgtLabel = '—', pairText = '', notesKey = '', notesDefault = '', hasPrev = false, hasNext = false;
+    if ((S.modalOpen || S.phase === 'ratings') && S.mi != null && items[S.mi] && items[S.mj]) {
+      srcLabel = items[S.mi].text; tgtLabel = items[S.mj].text;
+      pairText = 'Pair ' + this.ordinal(S.mi, S.mj) + ' of ' + total;
+      notesKey = this.pk(S.mi, S.mj); notesDefault = S.notes[notesKey] || '';
+      hasPrev = !!this.prevPair(S.mi, S.mj); hasNext = !!this.nextPair(S.mi, S.mj);
+    }
+    const navBtn = on => `font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;border-radius:9px;padding:8px 14px;cursor:${on ? 'pointer' : 'not-allowed'};border:1.5px solid #ECE7DD;background:#FFFFFF;color:${on ? '#211D18' : '#C9C2B5'};`;
+
+    let popStyle = '', popName = '', popDesc = '', popColor = ACC;
+    if (S.popoverOpen && S.pidx != null) {
+      const it = items[S.pidx]; popName = it.text; popDesc = it.description || '';
+      popColor = BASE[clusterHue[cluster[S.pidx]]];
+      const vw = window.innerWidth, vh = window.innerHeight, W = 320, H = 300;
+      let left = Math.min(S.px + 10, vw - W - 12); left = Math.max(12, left);
+      let top = Math.min(S.py, vh - H - 12); top = Math.max(12, top);
+      popStyle = `position:fixed;left:${left}px;top:${top}px;width:${W}px;z-index:60;`;
+    }
+
+    const phase = S.phase;
+    const isLanding = phase === 'landing', isInventory = phase === 'inventory', isMatrix = phase === 'matrix', isRatings = phase === 'ratings';
+    const tab = active => `font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;padding:7px 12px;border-radius:8px;cursor:pointer;border:none;background:${active ? '#211D18' : 'transparent'};color:${active ? '#FAF8F4' : '#8A8174'};`;
+    const navTabs = [
+      { label: '01 Inventory', onClick: () => this.setPhase('inventory'), style: tab(isInventory) },
+      { label: '02 Ratings', onClick: () => this.goRatings(), style: tab(isRatings) },
+      { label: '03 Clustering', onClick: () => this.setPhase('matrix'), style: tab(isMatrix) },
+    ];
+    const PROMPTS = ["A career direction you've considered", "A skill you've built over years", "A hobby you'd do unpaid", 'An academic interest that still pulls you', 'A resource you have (network, space, capital)', 'An open opportunity'];
+    const prompts = PROMPTS.map(p => ({ text: p, onClick: () => this.setPrompt(p) }));
+    const inventoryItems = items.map((it, i) => ({ n: String(i + 1).padStart(2, '0'), text: it.text, onRemove: () => this.removeInventoryItem(i) }));
+    const invCount = items.length;
+    const invPairs = invCount * (invCount - 1) / 2;
+    const canProceed = invCount >= 5;
+    const proceedLabel = canProceed ? ('Proceed to rating — ' + invPairs + ' pairs →') : ('Add ' + (5 - invCount) + ' more to continue');
+    const proceedStyle = `width:100%;padding:16px;border:none;border-radius:13px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.02em;cursor:${canProceed ? 'pointer' : 'not-allowed'};background:${canProceed ? ACC : '#EDE8DF'};color:${canProceed ? '#FFFFFF' : '#B8B0A2'};${canProceed ? 'box-shadow:0 12px 26px -14px rgba(240,98,63,0.85);' : ''}`;
+    const lgrid = S.landingCells.map((v, i) => {
+      const r = Math.floor(i / 9), c = i % 9; let style;
+      if (r > c) style = 'width:26px;height:26px;opacity:0;';
+      else if (r === c) style = 'width:26px;height:26px;border-radius:5px;background:#F4F1EA;border:1px solid #E6E0D5;box-sizing:border-box;';
+      else style = `width:26px;height:26px;border-radius:5px;background:${this.ramp(BASE[c % 5], v)};transition:background .45s ease;`;
+      return { style };
+    });
+    const lLegend = [1, 2, 3, 4, 5].map(v => ({ n: v, style: `width:11px;height:11px;border-radius:3px;background:${this.ramp(BASE[1], v)};` }));
+    const phases3 = [
+      { num: '01', label: 'Inventory', desc: 'Dump everything — careers, skills, hobbies, resources, open doors. Breadth is the asset.' },
+      { num: '02', label: 'Rate pairs', desc: 'Score the synergy between each pair. This is where the unexpected insights surface.' },
+      { num: '03', label: 'Matrix', desc: 'The algorithm clusters items by affinity — scatter becomes constellation.' },
+    ];
+    return {
+      isLanding, isInventory, isMatrix, isRatings, showNav: !isLanding, showProgress: isMatrix || isRatings,
+      ratingSaveLabel: hasNext ? 'Save & next →' : 'Save & view clustering →',
+      ratingCantSave: S.pendingScore == null,
+      ratingSaveStyle: `font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:11px;padding:11px 22px;cursor:${S.pendingScore == null ? 'not-allowed' : 'pointer'};color:${S.pendingScore == null ? '#B8B0A2' : '#FAF8F4'};background:${S.pendingScore == null ? '#EDE8DF' : '#F0623F'};${S.pendingScore == null ? '' : 'box-shadow:0 8px 20px -10px rgba(240,98,63,0.8);'}`,
+      onRatingSaveNext: () => this.ratingSaveNext(),
+      showCoach: !!(S.showCoach && coachId), coachRef: this.coachRef, onCoachDismiss: () => this.dismissCoach(),
+      navTabs, prompts, hintsOpen: !!S.hintsOpen, hintsCaret: S.hintsOpen ? '▾' : '▸', toggleHints: () => this.toggleHints(), inventoryItems, invCount, invPairs, hasItems: invCount > 0, cantProceed: !canProceed, proceedLabel, proceedStyle,
+      lgrid, lLegend, phases3,
+      goLanding: () => this.setPhase('landing'), onBegin: () => this.setPhase('inventory'), onProceed: () => this.goRatings(),
+      onAddInv: () => this.addFromInventory(), onInvKey: e => { if (e.key === 'Enter') this.addFromInventory(); }, invRef: this.invRef,
+      progressBarStyle: `height:100%;width:${progressPct};background:${ACC};transition:width .5s;`,
+      rated, total, itemCount: n,
+      columns, rows, labelGap: LABELW,
+      primaryName, primaryColor, primaryNote, topConns,
+      legendChips,
+      hasSel, selName, selColor, clusterNotes, hasNotes: hasSel && clusterNotes.length > 0, noNotes: hasSel && clusterNotes.length === 0,
+      onRecommend: () => this.recommend(), onResort: () => this.resort(), onExport: () => this.exportCsv(), onAddItem: () => this.addItem(),
+      recLabel: 'Recommend values',
+      recDialogOpen: !!S.recDialogOpen, onCloseRecDialog: () => this.closeRecDialog(),
+      modalOpen: S.modalOpen, srcLabel, tgtLabel, pairText, hasPrev, hasNext, noPrev: !hasPrev, noNext: !hasNext,
+      prevStyle: navBtn(hasPrev), nextStyle: navBtn(hasNext),
+      saveLabel: hasNext ? 'Save & Next' : 'Save & Close',
+      question: 'How likely is a job requiring skills for one of these to also require or benefit from the other?',
+      scaleText: '1 to 5',
+      anchors, examples, showExamples: S.showExamples, examplesCaret: S.showExamples ? '▾' : '▸',
+      onPrev: () => this.nav(-1), onNext: () => this.nav(1), onClose: () => this.closeModalSaving(), onSaveNext: () => this.saveAndNext(), onClear: () => this.clearScore(), onToggleExamples: () => this.toggleExamples(),
+      notesRef: this.notesRef, notesKey, notesDefault,
+      popoverOpen: S.popoverOpen, popStyle, popName, popDesc, popColor, nameRef: this.nameRef, descRef: this.descRef,
+      onPopDone: () => this.savePopover(), onPopDelete: () => this.deleteItem(), onPopClose: () => this.closePopover(),
+    };
+  }
+}
+
+Component.BASE = ['#27AE7A', '#1FA0B8', '#3D7DE0', '#8163DC', '#D45BB0'];
+
+Component.CAREERS = [
+  ['Restaurant Owner / Operator', 'food', 'Open and run a restaurant or cafe — concept, menu, staffing, and daily operations.'],
+  ['Food or Beverage Brand Founder', 'food', 'Build a packaged food or drink line from recipe to shelf, including production and distribution.'],
+  ['Specialty Food Distributor / Broker', 'food', 'Source and distribute artisan food/beverage products to retailers and restaurants.'],
+  ['Artisan Maker / Small-Batch Producer', 'food', 'Make and sell handmade goods (food, ceramics, pet items) via markets and online.'],
+  ['Farmers Market / Food Hall Manager', 'food', 'Manage vendors, logistics, and community at a market or food hall.'],
+  ['Culinary Instructor / Cooking Class Host', 'food', 'Teach cooking classes and food workshops to home cooks.'],
+  ['Test Kitchen / R&D Operations Manager', 'food', 'Coordinate recipe development and scale-up in a food company test kitchen.'],
+  ['Cat Cafe Owner', 'pet', 'Run a cafe paired with adoptable cats, blending hospitality with rescue partnerships.'],
+  ['Cat Toy / Pet Product Distributor', 'pet', 'Source, redistribute, and sell cat toys and pet products to shops and online buyers.'],
+  ['Cat Toy Designer / Product Developer', 'pet', 'Design and develop new cat toys and enrichment products from prototype to production.'],
+  ['Cat Behavior Consultant', 'pet', 'Help cat owners solve behavior issues through in-home or virtual consultations.'],
+  ['Animal Shelter / Rescue Director', 'pet', 'Lead operations, staff, and programs at a cat rescue or animal shelter.'],
+  ['Pet Industry Brand / Marketing Manager', 'pet', 'Lead brand, GTM, and product launches for a pet products company.'],
+  ['Veterinary Practice Manager', 'pet', 'Run the business operations of a veterinary clinic or cat-specialty practice.'],
+  ['TNR / Community Cat Program Coordinator', 'pet', 'Coordinate trap-neuter-return and community cat care programs.'],
+  ['Nonprofit Board Member / Chair', 'mission', 'Serve on a nonprofit board guiding strategy, governance, and fundraising.'],
+  ['Nonprofit Operations Director', 'mission', 'Run the operational backbone of a mission-driven nonprofit.'],
+  ['Sustainability / ESG Program Manager', 'mission', 'Lead environmental and social impact initiatives within a company.'],
+  ['Marine / Aquatic Conservation Program Manager', 'mission', 'Manage conservation projects protecting marine and aquatic ecosystems.'],
+  ['Garden / Urban Farm Project Manager', 'mission', 'Plan and run community garden or small urban-farm operations.'],
+  ['Museum Exhibition Director', 'science', 'Lead the planning and delivery of museum exhibitions end to end.'],
+  ['Science Center Program Director', 'science', 'Develop and run public science programs and events.'],
+  ['Aquarium Operations / Curator', 'science', 'Oversee aquatic exhibits, animal care protocols, and operations at an aquarium.'],
+  ['Citizen Science Program Manager', 'science', 'Design programs that involve the public in real scientific data collection.'],
+  ['Executive / Leadership Coach', 'lead', 'Coach leaders and emerging managers on effectiveness and growth.'],
+  ["Women's Leadership Program Director", 'lead', 'Run a program developing women leaders through workshops and cohorts.'],
+  ['Fractional COO / Operations Consultant', 'lead', 'Provide part-time operations leadership to startups and small businesses.'],
+  ['Chief of Staff', 'lead', 'Serve as strategic right hand to an executive, driving priorities and cadences.'],
+  ['Event & Experience Producer', 'lead', 'Produce large-scale events, offsites, and immersive experiences.'],
+  ['Wedding / Special Events Planner', 'lead', 'Plan and coordinate weddings and milestone events end to end.'],
+];
+</script>
+</body>
+</html>

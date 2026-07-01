@@ -1,0 +1,169 @@
+THROUGHLINE — MARKETING STRATEGY BRIEF
+Career clarity, built from what you already have.
+A discussion starter for product design and branding partners.
+
+
+1. THE PRODUCT IN ONE LINE
+
+A structured self-discovery instrument that finds the single career direction
+sitting at the intersection of the most interests, skills, and resources a
+person already has — turning a scattered list into a unifying professional
+purpose.
+
+The mechanism: the user inventories everything they care about and can do,
+rates the synergy between every pair, and the tool clusters the result to
+reveal which directions hold the most of their life together. Two hours of
+focused effort, one defensible answer to "what should I actually do?"
+
+
+2. THE CORE INSIGHT (THE WHITE SPACE)
+
+Existing tools assess the individual in isolation — strengths, personality,
+energy patterns. None of them address the synergy BETWEEN a person's many
+interests. Ikigai gestures at "purpose lives at an intersection" but offers
+no method to find it. Throughline occupies the unoccupied cell: a rigorous
+instrument plus the intersection thesis. We own the dimension the incumbents
+ignore.
+
+Strategic posture: we market like Pigment, not like BetterUp. As a new
+entrant we name the dimension the giants overlook and plant our flag there,
+rather than competing on coaching scale.
+
+
+3. TARGET MARKET
+
+Primary: the multi-passionate professional in transition. Mid-career, roughly
+28-45, capable across several domains, currently fragmented or recently
+displaced. They have outgrown generic personality quizzes and want analytical
+rigor, not personality astrology. They already keep lists and respect a
+framework. Their pain is not lack of options — it is too many, with no way to
+reconcile them.
+
+Secondary: career coaches and outplacement firms (the tool as an instrument
+they run clients through), bootcamp and graduate career services, and the
+portfolio-career / solopreneur crowd deciding what to build.
+
+Disqualifier: the person who already knows what they want. This is for the
+overwhelmed-by-options, not the directionless-and-passive.
+
+
+4. BRAND POSITIONING
+
+We live in the gap between two poles: the soft affirming personality-quiz
+space (too fluffy, no rigor) and dry productivity tooling (too cold, no
+meaning). Our register is ANALYTICAL WARMTH — rigorous method in service of a
+deeply personal payoff.
+
+Tonal anchors: clarifying, structured, earned. Not "find your bliss" but
+"find your through-line."
+
+North star: CliftonStrengths' credibility wrapped in Ikigai's intuitive
+promise. We borrow the trusted-method / objective-result framing from the
+incumbents and the purpose-at-an-intersection mental model from Ikigai, then
+own the procedure that neither provides.
+
+The matrix itself is the central brand motif — a grid that resolves from
+noise into clusters is a literal picture of the value proposition.
+
+
+5. THE LEAD CAMPAIGN CONCEPT — "MANY SELVES, ONE DIRECTION"
+
+The hero creative dramatizes the mechanism. The arc of the spot mirrors the
+arc of the tool: fragmentation resolving into focus.
+
+OPEN (the many selves):
+  We all contain many selves. The father. The musician. The programmer. The
+  frisbee player on Sunday mornings.
+  [Fast-scrolling, overlapping images of one person across these varied
+  contexts — warm, real, slightly cluttered. The visual feeling is abundance
+  bordering on overwhelm.]
+
+TURN (the problem):
+  How do we choose just one career when the world is so cluttered with
+  opportunities and directions?
+  [The images pile up and compete; the frame feels crowded.]
+
+RESOLVE (the method):
+  Use a structured process to find the career strategy that unites your
+  greatest interests with your strongest path.
+  [Cut to a person at a whiteboard — a grid, sticky notes, clusters forming.
+  The clutter resolves into a single legible shape. Calm replaces noise.]
+
+CLOSE:
+  Throughline. Career clarity, built from what you already have.
+
+Why it works: the "many selves resolving into one" structure IS the product
+demo. The clutter-to-clarity visual transition is the value proposition made
+literal, and it differentiates instantly from quiz-style competitors who can
+only show a results screen.
+
+
+6. MARKETING STRATEGY
+
+a) DEMONSTRATION OVER DESCRIPTION
+The product is hard to explain in a tagline, so lead with worked examples.
+The "I like marketing AND cooking — so I could build a business marketing
+food I make" style of revealed synergy is the best teaching artifact we have.
+Build a library of these short, concrete before/after vignettes; each one
+teaches the mechanism faster than any feature list.
+
+b) CONTENT-LED ACQUISITION ON A NAMED PAIN
+Build essays and short video around "having too many interests is a real
+problem" — a pain the multi-passionate feels acutely and that existing career
+content underserves. This is the Pigment register: name the gap the incumbents
+ignore, in a confident analytical voice.
+
+c) FREE LITE VERSION AS TOP OF FUNNEL
+A small, fast matrix that delivers a genuine aha-moment with low friction,
+gating the full deep process behind sign-up or payment. The insight has to be
+reachable before the commitment is asked for.
+
+d) COACH AND INSTITUTION PARTNERSHIPS
+Career coaches and outplacement firms are both a distribution channel and a
+credibility source. The tool makes their sessions more productive; they bring
+clients and lend authority. Pursue the same with bootcamp and graduate career
+services.
+
+e) SEED IN EXISTING-IDENTITY COMMUNITIES
+Multi-passionate, polymath, portfolio-career, and solopreneur communities
+already have language for this identity. Meet them there rather than building
+awareness from zero.
+
+
+7. THE CENTRAL DESIGN-AND-MARKETING RISK
+
+The pairwise-rating phase is both the source of all value and the most likely
+point of abandonment — potentially hundreds of intersections to score. Every
+branding and UX decision must make a tedious combinatorial chore feel like
+progressive discovery rather than data entry. Candidate approaches to put on
+the table: surfacing micro-insights mid-rating, intelligent ordering so
+high-signal pairs come first, progress mechanics, and a "good enough"
+sampling mode. This is the priority problem for the firm to solve, because the
+marketing promise of "two hours, one answer" lives or dies on it.
+
+
+8. COMPETITIVE REFERENCE MAP
+
+Closest analogues (study model and funnel):
+  CliftonStrengths / Gallup — the credibility and language-ownership playbook.
+  16Personalities, Enneagram — the free-result-to-paid-depth funnel.
+  Pigment.is — the David-vs-Goliath positioning to emulate.
+
+Conceptual rivals (compete for the mental space; our opening):
+  Ikigai — owns the intersection idea, lacks a method. Our scaffold.
+  Designing Your Life (Burnett & Evans) — our intellectual lineage and tone.
+
+Adjacent / channel (partners more than rivals):
+  BetterUp, The Muse, Ama La Vida — productized coaching; tone reference.
+  Creator-brands (Sho Dewan, Anna Papalia, Ken Coleman) — the content-funnel
+  playbook and proof the audience and channel exist.
+
+
+9. QUESTIONS FOR THE FIRM
+
+- How do we make the rating phase feel like discovery, not data entry?
+- Does the brand architecture stay single (Throughline does everything) at
+  launch, splitting out a service tier only after the coach channel proves out?
+- How far do we lean on the matrix-grid as visual identity vs. the
+  many-selves human imagery?
+- What is the single aha-moment the free lite version must deliver?

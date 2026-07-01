@@ -1,0 +1,13 @@
+typesafe_key.txt
+MCP Server/WorkOS SSO Details.txt
+
+.DS_Store
+**/.DS_Store
+
+_deploy/
+
+.claude/settings.local.json
+
+node_modules/
+.env
+.env.local

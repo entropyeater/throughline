@@ -1,0 +1,45 @@
+# Throughline — Apache config (cache policy + security headers).
+#
+# Optional, for Apache hosts. The app is a static front end that stores nothing
+# server-side and makes no calls of its own, so this is mostly hygiene.
+
+# --- Cache: always revalidate the app's own files -------------------------
+# Without this, hosts often serve static files with a long (30-day) cache, so
+# browsers keep running a stale app.js/style.css after a deploy. Forcing
+# revalidation is cheap (unchanged files reply "304 Not Modified") and makes
+# deploys take effect immediately.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|js|css|json)$">
+    Header set Cache-Control "no-cache, must-revalidate, max-age=0"
+    Header unset Expires
+    Header unset Pragma
+  </FilesMatch>
+
+  # --- Security headers ----------------------------------------------------
+  # Mirrors the <meta> CSP in index.html: same-origin scripts/styles, plus
+  # Google Fonts; images may be data: URIs (the inline favicon); the browser
+  # only connects same-origin (api/evaluate.php proxies Typesafe server-side);
+  # no framing.
+  Header set Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'"
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "DENY"
+  Header set Permissions-Policy "geolocation=(), camera=(), microphone=(), interest-cohort=()"
+</IfModule>
+
+<IfModule mod_expires.c>
+  <FilesMatch "\.(html|js|css|json)$">
+    ExpiresActive Off
+  </FilesMatch>
+</IfModule>
+
+# ES modules must be served with a JS MIME type or browsers refuse to run them.
+<IfModule mod_mime.c>
+  AddType text/javascript .js
+</IfModule>
+
+# Never serve the Typesafe API key over the web. The proxy (api/evaluate.php)
+# reads it from disk server-side; the browser must never be able to fetch it.
+<Files "typesafe_key.txt">
+  Require all denied
+</Files>

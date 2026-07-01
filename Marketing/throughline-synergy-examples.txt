@@ -1,0 +1,115 @@
+THROUGHLINE — SYNERGY VIGNETTE LIBRARY
+Non-obvious intersections that double as ad creative and onboarding examples.
+
+
+INTRO PARAGRAPH (for recruiting testers)
+
+I'm building a tool that helps people with too many interests find the one
+career direction that actually unites them. You list everything you care about
+and can do — work, skills, hobbies, half-formed ideas — and it maps the hidden
+synergies between them to surface a direction you'd never have spotted on your
+own. It takes a couple of hours and tends to reveal something genuinely
+surprising. I'd love a few sharp people to run through it and tell me what
+they find. Want to try it?
+
+
+THE VIGNETTES
+
+Each follows the same shape: two or three interests that seem unrelated, the
+non-obvious direction their intersection points to, and why it holds. The
+value is in the leap the user wouldn't have made unaided.
+
+
+1. COMPETITIVE GAMING + PHYSICAL THERAPY
+   Seem unrelated: one is a screen-bound hobby, one is a clinical profession.
+   The intersection: esports performance and injury rehabilitation. Pro
+   gamers suffer wrist, hand, and posture injuries that almost no clinician
+   understands from the inside. A physical therapist who actually plays at a
+   high level can build a specialist practice an outsider could never credibly
+   enter.
+   Why it holds: the gaming fluency is not a distraction from the career — it
+   is the moat around it.
+
+
+2. AMATEUR BEEKEEPING + CYBERSECURITY
+   Seem unrelated: bees and breach detection.
+   The intersection: distributed-systems resilience consulting, taught through
+   the metaphor of the hive. A practitioner who deeply understands both can do
+   unusually clear corporate training and writing on swarm behavior, failure
+   tolerance, and decentralized defense. The beekeeping is the explanatory
+   gift that makes the security expertise legible to executives.
+   Why it holds: the obscure hobby becomes the communication edge in a field
+   starved of plain language.
+
+
+3. STAND-UP COMEDY + TAX ACCOUNTING
+   Seem unrelated: the stage and the spreadsheet.
+   The intersection: financial education content and live corporate training
+   that people actually remember. The single hardest problem in accounting
+   adjacency is that nobody can stay awake for it. Comedic timing is the rare
+   skill that solves the exact bottleneck of the dry profession.
+   Why it holds: the interests are not in different worlds — one is the
+   delivery system for the other.
+
+
+4. RESTORING VINTAGE MOTORCYCLES + ELDERCARE
+   Seem unrelated: grease and geriatrics.
+   The intersection: a workshop-based therapeutic program for older men, who
+   are notoriously underserved by talk-based and craft-based care because it
+   does not feel like "their" thing. Hands-on mechanical restoration is a
+   proven engagement vector for exactly that population.
+   Why it holds: the hobby is the trust-building medium the care profession
+   cannot manufacture on its own.
+
+
+5. COMPETITIVE BAKING + SUPPLY-CHAIN LOGISTICS
+   Seem unrelated: croissants and container ships.
+   The intersection: perishable-goods logistics consulting, or founding a
+   premium short-shelf-life food brand whose entire defensibility is
+   distribution. Most food entrepreneurs fail on logistics; most logistics
+   experts have no feel for the product. Holding both is rare and valuable.
+   Why it holds: the two interests cover each other's blind spot exactly.
+
+
+6. TRANSLATION / LANGUAGE LEARNING + UX DESIGN
+   Seem unrelated: literature and interfaces.
+   The intersection: localization strategy and cross-cultural product design
+   — not just translating strings, but designing flows that survive crossing
+   a language and a culture. A designer who has felt the friction of learning
+   a language from the inside designs differently.
+   Why it holds: the hobby is direct, transferable domain knowledge wearing
+   the disguise of a pastime.
+
+
+7. LONG-DISTANCE RUNNING + WRITING SOFTWARE DOCUMENTATION
+   Seem unrelated: trails and technical manuals.
+   The intersection: pacing and endurance as a design philosophy for
+   onboarding and developer-experience writing — work that lives or dies on
+   sustaining a reader's attention across a long, effortful journey. The
+   runner's intuition for managing fatigue, milestones, and second winds maps
+   surprisingly directly onto structuring documentation people finish.
+   Why it holds: the transferable asset is a felt sense of pacing that
+   non-runners rarely articulate.
+
+
+8. AQUARIUM KEEPING + REGULATORY COMPLIANCE
+   Seem unrelated: fish tanks and frameworks.
+   The intersection: building or consulting on monitoring systems for closed,
+   sensitive systems — water chemistry and regulatory drift are the same
+   problem shape: invisible parameters drifting toward a cliff, where the
+   skill is noticing early and correcting calmly. The hobby trains the exact
+   temperament the profession rewards.
+   Why it holds: the synergy is not topical but temperamental — the same
+   cognitive style serves both.
+
+
+HOW TO USE THESE
+
+As ad creative: each is a 5-7 second card — two icons that don't belong
+together, the arrow, the unexpected third thing. The format itself teaches
+the mechanism.
+
+As onboarding examples: show two or three before the user builds their own
+list, to prime them to enter wide and weird rather than safe and on-the-nose.
+The lesson to plant: the further apart two interests seem, the more valuable
+the intersection if one exists.

@@ -1,0 +1,29 @@
+Insight matrix instructions for Claude Design
+
+Insight Matrix for Career Clarity — Discussion Brief
+The Concept in One Line
+A structured tool that finds the single career direction sitting at the intersection of the most interests, skills, and resources you already have — turning a scattered list into a unifying professional purpose.
+Value Proposition
+Most career advice tells people to "follow their passion" (singular) or "explore your options" (infinite). Both fail the person who has too many interests and no way to reconcile them. This tool inverts the problem: instead of forcing a choice between competing directions, it surfaces the hidden synergies between them and identifies the one pursuit that satisfies the greatest number at once.
+The core promise: two hours of focused effort converts a dozen half-pursued directions into one central goal with the gravitational pull to hold your attention. It makes invisible adjacencies visible — the marketing-plus-cooking-equals-food-business insight that was always latent but never articulated.
+The emotional hook is relief from fragmentation. The functional hook is a defensible, self-generated answer to "what should I actually do?" that the user trusts because they built it themselves.
+How It Works (Three Phases)
+1. Inventory. The user dumps everything — professional paths, dormant skills, hobbies, academic interests, resources, open opportunities. Breadth is the asset. The sweet spot is 15–40 items; fewer and synergies stay obvious, more and the matrix becomes unwieldy.
+2. Pairwise rating. The user scores the synergy between item pairs. This is the demanding middle — potentially hundreds of intersections — and it's where the unexpected insights surface. This phase is also the product's central design risk (see below).
+3. Clustering and revelation. The matrix algorithmically groups items by thematic affinity. The user inspects clusters to see what hangs together and, crucially, which specific intersections are the connective tissue. That "why" is the deep insight — the cluster isn't just a category, it's a articulated rationale for a direction worth pursuing.
+The Central Design Problem
+Phase 2 is both the source of all value and the most likely point of abandonment. The entire branding and UX challenge is making a tedious combinatorial chore feel like progressive discovery rather than data entry. Worth flagging to the firm as the priority problem to solve. Candidate approaches to put on the table: surfacing micro-insights mid-rating ("you've rated these three highly — notice a pattern?"), gamifying progress, intelligent ordering so high-signal pairs come first, or a "good enough" sampling mode that doesn't require every cell.
+Target Market
+Primary: the multi-passionate professional in transition — mid-career, 28–45, capable across several domains, currently fragmented or recently displaced. They've outgrown generic career quizzes (Myers-Briggs, StrengthsFinder) and want analytical rigor, not personality astrology. They're the type who already keeps lists and respects a framework.
+Secondary segments worth naming: career coaches and outplacement firms (B2B2C — the tool as an instrument they run clients through), bootcamp and grad-program career services, and the "portfolio career" / solopreneur crowd deciding what to build.
+The disqualifier is the person who already knows what they want. This is for the overwhelmed-by-options, not the directionless-and-passive.
+Brand Positioning
+Position against two poles: the soft, affirming personality-quiz space (too fluffy, no rigor) and dry productivity tooling (too cold, no meaning). The brand lives in the gap — analytical warmth. Rigorous method in service of a deeply personal payoff.
+Tonal anchors: clarifying, structured, earned. Not "find your bliss" but "find your through-line." The matrix itself is a strong visual asset — a grid that resolves from noise into clusters is a literal picture of the value proposition, and should probably be the central brand motif.
+Name territory to explore with the firm: the through-line / convergence / intersection concept, the synthesis-from-fragments concept, or the "constellation" idea (scattered points that reveal a shape). Avoid anything that reads as a generic SaaS or another personality test.
+Marketing Strategy
+The product is inherently hard to explain in a tagline, so lead with demonstration over description. Concrete moves to discuss:
+Content-led acquisition built on the "too many interests is a real problem" narrative — essays and short videos that name the multi-passionate's specific pain, which is underserved by existing career content. The marketing-plus-cooking style worked example is your best teaching artifact; build several.
+A free, low-friction "lite" version (a small matrix, fast result) as the top of funnel, with the full deep process as the paid or gated experience. The aha-moment has to be reachable before the commitment.
+Partnerships with career coaches as a distribution channel — they bring clients and lend credibility, and the tool makes their sessions more productive.
+Seed in communities where multi-passionate identity already has language: solopreneur, polymath, and career-change spaces.

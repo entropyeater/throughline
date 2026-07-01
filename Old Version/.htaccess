@@ -1,0 +1,34 @@
+# Insight Matrix — cache policy.
+#
+# Without this, the host serves the app's static files with a 30-day cache
+# (Cache-Control: max-age=2592000). That makes browsers keep running a stale
+# app.js / style.css after you deploy an update — users won't see changes for
+# up to a month unless they hard-refresh.
+#
+# Fix: force the app's OWN files (HTML/JS/CSS) to revalidate on every load.
+# This is cheap — when a file is unchanged the server replies "304 Not
+# Modified" (no body) thanks to ETag/Last-Modified — and it guarantees a deploy
+# takes effect immediately. CDN libraries (d3, ml-kmeans) are unaffected; they
+# are versioned URLs and can stay cached.
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|js|css|json)$">
+    Header set Cache-Control "no-cache, must-revalidate, max-age=0"
+    Header unset Expires
+    Header unset Pragma
+  </FilesMatch>
+</IfModule>
+
+# Stop any inherited mod_expires rule from re-adding a long max-age for these
+# file types.
+<IfModule mod_expires.c>
+  <FilesMatch "\.(html|js|css|json)$">
+    ExpiresActive Off
+  </FilesMatch>
+</IfModule>
+
+# Make sure JS modules are served with a JS MIME type (browsers refuse to run
+# ES modules served as anything else). The host already does this, but pin it.
+<IfModule mod_mime.c>
+  AddType text/javascript .js
+</IfModule>

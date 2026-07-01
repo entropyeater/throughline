@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Insight Matrix</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23fbfbff'/%3E%3Cg transform='translate(5 5)'%3E%3Crect x='0' y='0' width='6' height='6' rx='1' fill='%236baed6'/%3E%3Crect x='8' y='0' width='6' height='6' rx='1' fill='%23c6dbef'/%3E%3Crect x='16' y='0' width='6' height='6' rx='1' fill='%239ecae1'/%3E%3Crect x='0' y='8' width='6' height='6' rx='1' fill='%23c6dbef'/%3E%3Crect x='8' y='8' width='6' height='6' rx='1' fill='%232171b5'/%3E%3Crect x='16' y='8' width='6' height='6' rx='1' fill='%23bcbddc'/%3E%3Crect x='0' y='16' width='6' height='6' rx='1' fill='%239ecae1'/%3E%3Crect x='8' y='16' width='6' height='6' rx='1' fill='%23bcbddc'/%3E%3Crect x='16' y='16' width='6' height='6' rx='1' fill='%23756bb1'/%3E%3C/g%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- LIST VIEW: index of saved matrices. The branding header lives here so
+         it only appears on the intro page, not while editing a matrix. -->
+    <main id="listView" class="view hidden">
+      <header class="page-header">
+        <h1>Insight Matrix</h1>
+        <p class="subtitle">
+          Score, visualize, and cluster comparative similarities amongst related
+          elements. Based on Chuck Owen's <em>Insight Matrix</em>; original
+          Observable rewrite by
+          <a href="https://observablehq.com/@zachpino/insight-matrix"
+            >Zach Pino</a
+          >.
+        </p>
+      </header>
+      <div class="list-header">
+        <h2>Your matrices</h2>
+        <div class="list-header-actions">
+          <button id="importCsvBtn" class="large" type="button">
+            ↑ Import CSV
+          </button>
+          <button id="createMatrixBtn" class="primary large" type="button">
+            + New matrix
+          </button>
+        </div>
+      </div>
+      <!-- Hidden picker driven by the Import CSV button. Accepts either a
+           plain element list (first column = name, rest = detail fields) or an
+           exported labeled adjacency matrix. -->
+      <input
+        id="csvFileInput"
+        type="file"
+        accept=".csv,text/csv"
+        class="hidden"
+        aria-hidden="true"
+      />
+      <ul id="matrixList" class="matrix-list"></ul>
+    </main>
+
+    <!-- DETAIL VIEW: editing a single matrix. -->
+    <main id="detailView" class="view hidden">
+      <div class="detail-header">
+        <a href="#/" class="back-link" id="backToListLink">← All matrices</a>
+        <input
+          id="matrixNameInput"
+          class="matrix-name-input"
+          type="text"
+          placeholder="Untitled matrix"
+          aria-label="Matrix name"
+        />
+      </div>
+
+      <section class="panel setup-panel">
+        <div class="prominent-actions">
+          <button id="recommendBtn" type="button" class="primary">
+            Recommend Interaction Values
+          </button>
+          <button id="resortBtn" type="button">Re-Sort Matrix</button>
+          <button id="downloadCsvBtn" type="button">Download CSV</button>
+        </div>
+
+        <details class="matrix-setup collapsible-section">
+          <summary>Matrix Setup</summary>
+          <div class="collapsible-body">
+            <label class="field">
+              <span class="field-label">Question</span>
+              <textarea
+                id="questionInput"
+                rows="2"
+                placeholder="What are you trying to understand about these elements?"
+              ></textarea>
+            </label>
+
+            <label class="field">
+              <span class="field-label">Additional details / notes</span>
+              <textarea
+                id="questionNotesInput"
+                rows="2"
+                placeholder="Context, definitions, or anything that helps interpret the question while rating."
+              ></textarea>
+            </label>
+
+            <label class="field">
+              <span class="field-label">Elements (comma-separated)</span>
+              <textarea
+                id="elementsInput"
+                rows="3"
+                placeholder="One per item, separated by commas."
+              ></textarea>
+            </label>
+
+            <div class="field-row">
+              <label class="field">
+                <span class="field-label">Cluster count</span>
+                <input id="kCount" type="number" value="3" min="1" max="15" />
+              </label>
+              <label class="field">
+                <span class="field-label">Reflexive (self-self) value</span>
+                <input
+                  id="reflexiveValue"
+                  type="number"
+                  value="5"
+                  min="0"
+                  step="0.1"
+                />
+              </label>
+            </div>
+
+            <div class="actions">
+              <button id="rebuildBtn" type="button">
+                Rebuild from Elements
+              </button>
+            </div>
+
+            <details class="display-settings collapsible-section">
+              <summary>Advanced settings</summary>
+              <div class="settings-grid">
+                <label class="field">
+                  <span class="field-label">Scale min</span>
+                  <input id="scaleMin" type="number" value="0" step="0.1" />
+                </label>
+                <label class="field">
+                  <span class="field-label">Scale max</span>
+                  <input id="scaleMax" type="number" value="5" step="0.1" />
+                </label>
+                <label class="field">
+                  <span class="field-label">Margin</span>
+                  <input
+                    id="margin"
+                    type="number"
+                    value="100"
+                    min="0"
+                    max="500"
+                  />
+                </label>
+                <label class="field">
+                  <span class="field-label">Label spacing</span>
+                  <input
+                    id="labelSpacing"
+                    type="number"
+                    value="10"
+                    min="0"
+                    max="100"
+                  />
+                </label>
+                <label class="field">
+                  <span class="field-label">Font size</span>
+                  <input
+                    id="fontSize"
+                    type="number"
+                    value="12"
+                    min="6"
+                    max="24"
+                  />
+                </label>
+                <label class="field">
+                  <span class="field-label">Font family</span>
+                  <select id="font">
+                    <option>sans-serif</option>
+                    <option>Helvetica</option>
+                    <option>Arial</option>
+                    <option>Georgia</option>
+                    <option>Times New Roman</option>
+                    <option>Courier</option>
+                    <option>monospace</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span class="field-label">Cell stroke color</span>
+                  <input id="cellStrokeColor" type="color" value="#ffffff" />
+                </label>
+                <label class="field">
+                  <span class="field-label">Cell stroke width</span>
+                  <input
+                    id="cellStrokeWidth"
+                    type="number"
+                    value="2"
+                    min="0"
+                    max="10"
+                    step="0.5"
+                  />
+                </label>
+                <label class="field">
+                  <span class="field-label">Cell font color</span>
+                  <input id="cellFontColor" type="color" value="#ffffff" />
+                </label>
+                <label class="field">
+                  <span class="field-label">Background color</span>
+                  <input id="backgroundColor" type="color" value="#fbfbff" />
+                </label>
+                <label class="field checkbox">
+                  <input id="symmetricValues" type="checkbox" checked />
+                  <span>Show symmetric values</span>
+                </label>
+                <label class="field checkbox">
+                  <input id="shuffleOnSort" type="checkbox" checked />
+                  <span>Shuffle positions on clustering</span>
+                </label>
+              </div>
+            </details>
+          </div>
+        </details>
+      </section>
+
+      <section id="matrixContainer" class="matrix-container"></section>
+
+      <!-- Cluster legend + per-cluster notes. Select a cluster chip to
+           highlight it in the grid and reveal the ideas/notes captured on its
+           cells. -->
+      <section id="clusterPanel" class="cluster-panel hidden">
+        <h2 class="cluster-panel-title">Clusters</h2>
+        <p class="cluster-panel-hint">
+          Select a cluster to highlight it and review the notes from its cells.
+        </p>
+        <div id="clusterLegend" class="cluster-legend"></div>
+        <div id="clusterDetails" class="cluster-details hidden"></div>
+      </section>
+    </main>
+
+    <!-- Element details popover. -->
+    <div
+      id="elementPopover"
+      class="element-popover hidden"
+      role="dialog"
+      aria-modal="false"
+    >
+      <div class="popover-head">
+        <h4 id="popoverTitle"></h4>
+        <button id="popoverEditBtn" type="button" class="link-btn">Edit</button>
+      </div>
+      <div id="popoverBody" class="popover-body"></div>
+    </div>
+
+    <!-- Rating modal. -->
+    <div
+      id="ratingModal"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="ratingModalTitle"
+    >
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-card">
+        <button class="modal-close" data-close aria-label="Close">×</button>
+        <div class="rating-nav-bar">
+          <button
+            id="ratingPrevBtn"
+            type="button"
+            class="rating-nav-btn"
+            aria-label="Previous interaction"
+          >
+            ← Prev
+          </button>
+          <span id="ratingPairOrdinal" class="rating-nav-counter">—</span>
+          <button
+            id="ratingNextBtn"
+            type="button"
+            class="rating-nav-btn"
+            aria-label="Next interaction"
+          >
+            Next →
+          </button>
+        </div>
+        <h3 id="ratingModalTitle">
+          <span id="ratingSourceLabel" class="pair-item">—</span>
+          <span id="ratingTargetLabel" class="pair-item">—</span>
+        </h3>
+        <dl class="modal-meta">
+          <dt>Question</dt>
+          <dd id="ratingQuestionDisplay"></dd>
+          <dd id="ratingNotesDisplay" class="modal-meta-notes"></dd>
+          <dt>Scale</dt>
+          <dd id="ratingScaleDisplay"></dd>
+        </dl>
+
+        <div class="rating-field">
+          <div class="rating-field-head">
+            <span class="field-label">Rating</span>
+            <button id="clearRatingBtn" type="button" class="link-btn">
+              Clear
+            </button>
+          </div>
+          <div
+            id="ratingButtons"
+            class="rating-buttons"
+            role="radiogroup"
+            tabindex="0"
+            aria-label="Rating"
+          ></div>
+          <button
+            id="examplesToggle"
+            type="button"
+            class="examples-toggle"
+            aria-expanded="false"
+          >
+            <span class="examples-caret">▸</span> Example ratings
+          </button>
+          <div id="ratingExamples" class="rating-examples hidden"></div>
+        </div>
+
+        <label class="field">
+          <span class="field-label"
+            >Resulting ideas, questions, and other notes</span
+          >
+          <textarea
+            id="cellNotesInput"
+            rows="3"
+            placeholder="Jot any ideas, questions, or observations sparked by this pair."
+          ></textarea>
+        </label>
+
+        <div class="modal-actions">
+          <button data-close type="button">Close</button>
+          <button id="ratingSaveBtn" class="primary" type="button">
+            Save &amp; Next
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit-item dialog: rename / re-describe / delete an element. -->
+    <div
+      id="editItemModal"
+      class="modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="editItemTitle"
+    >
+      <div class="modal-backdrop" data-edit-close></div>
+      <div class="modal-card">
+        <button class="modal-close" data-edit-close aria-label="Close">
+          ×
+        </button>
+        <h3 id="editItemTitle">Edit item</h3>
+        <label class="field">
+          <span class="field-label">Name</span>
+          <input id="editItemName" type="text" placeholder="Item name" />
+        </label>
+        <label class="field">
+          <span class="field-label">Description</span>
+          <textarea
+            id="editItemDescription"
+            rows="4"
+            placeholder="A short description of this item."
+          ></textarea>
+        </label>
+        <div class="modal-actions edit-item-actions">
+          <button id="editItemDeleteBtn" type="button" class="danger">
+            Delete item
+          </button>
+          <span class="action-spacer"></span>
+          <button data-edit-close type="button">Cancel</button>
+          <button id="editItemSaveBtn" class="primary" type="button">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="page-footer">
+      <p>
+        Data is saved per-browser in <code>localStorage</code>. The
+        <code>api.js → recommendInteractionValues</code> hook still returns
+        1 for every pair as a stub.
+      </p>
+    </footer>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
